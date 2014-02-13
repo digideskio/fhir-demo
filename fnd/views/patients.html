@@ -1,0 +1,16 @@
+<div class="patients">
+  <h1 class="page-header"> Patients <a href="#/patients/new.html" class="btn btn-success">Upload</a> </h1>
+  <table class="table">
+    <tr ng-repeat="item in items">
+      <td>
+        <a href="#/patients/{{item.id}}.html">{{item.name | humanName}}</a>
+      </td>
+      <td>
+        {{ item.birthDate | date }}
+      </td>
+      <td>
+        {{item.gender.coding[0].display}}
+      </td>
+  </table>
+  <!-- <pre>{{items | json}}</pre> -->
+</div>
