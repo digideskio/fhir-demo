@@ -3,4 +3,4 @@
 fnd/lib/
 bin/
 ngx/pcre-8.34/
-**/Make
+**/Makefile
