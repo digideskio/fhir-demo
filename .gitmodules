@@ -1,15 +1,3 @@
-[submodule "ngx/ngx_postgres"]
-	path = ngx/ngx_postgres
-	url = https://github.com/FRiCKLE/ngx_postgres.git
-[submodule "ngx/echo-nginx-module"]
-	path = ngx/echo-nginx-module
-	url = https://github.com/agentzh/echo-nginx-module
-[submodule "ngx/nginx"]
-	path = ngx/nginx
-	url = https://github.com/nginx/nginx.git
-[submodule "ngx/form-input-nginx-module"]
-	path = ngx/form-input-nginx-module
-	url = https://github.com/calio/form-input-nginx-module.git
-[submodule "ngx/ngx_devel_kit"]
-	path = ngx/ngx_devel_kit
-	url = https://github.com/simpl/ngx_devel_kit.git
+[submodule "ngx_openresty"]
+	path = ngx_openresty
+	url = https://github.com/agentzh/ngx_openresty.git
