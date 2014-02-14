@@ -15,15 +15,16 @@ as $$
   }
   if(req.uri_args && req.uri_args._echo){ return req; }
 
+  plv8.elog(NOTICE, JSON.stringify(req))
   route = plv8
-  .execute("SELECT * FROM app.routes where pattern = $1 limit 1",
-    [req.uri])[0]
+  .execute("SELECT * FROM app.routes where upper(method) = upper($1) AND pattern = $2 limit 1",
+    [req.meth, req.uri])[0]
 
   if(route){
     try {
       return plv8.execute("SELECT actions." + route.handler + "($1) as res",[req])[0]['res']
     }catch(e){
-      return {error: e.message};
+      return {error: e.toString()};
     }
   } else {
     return {error: 'missing route', req: req }

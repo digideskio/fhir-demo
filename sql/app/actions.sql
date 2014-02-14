@@ -52,3 +52,42 @@ $$;
 
 SELECT actions.resource('{"uri_args": {"type": "patient"}}'::json);
 --}}}
+
+--{{{
+DROP FUNCTION actions.create_resource(json);
+CREATE OR REPLACE
+FUNCTION actions.create_resource(body json)
+RETURNS json
+language plpgsql AS $$
+BEGIN
+  RETURN row_to_json(ROW(fhir.insert_resource(body->'request_body')));
+END
+$$;
+
+SELECT actions.create_resource('{"request_body": {"resourceType": "Patient"}, "uri_args": {"type": "patient"}}'::json);
+--}}}
+
+--{{{
+CREATE or REPLACE
+FUNCTION actions.demo(req json)
+RETURNS json
+language plv8
+as $$
+ return plv8.execute( "SELECT array_to_json(array_agg(row_to_json(t.*)))::varchar as json from demo." + req.uri_args.rel + ' t')[0]['json']
+$$;
+
+CREATE or REPLACE
+FUNCTION actions.demo_by_attr(req json)
+RETURNS json
+language plv8
+as $$
+ var args = req.uri_args;
+ var sql = "SELECT row_to_json(t.*)::varchar as json from demo." + req.uri_args.rel + ' t where ' + args.col + '= $1 limit 1'
+ plv8.elog(NOTICE, sql)
+ return (plv8.execute(sql,[args.val])[0] || {json: {"error": 'nothing found'}})['json']
+$$;
+--}}}
+--{{{
+select * from demo.example_resource_list limit 1;
+SELECT actions.demo_by_attr('{"uri_args": {"rel": "example_resource", "col": "file", "val": "address-use.json"}}'::json);
+--}}}

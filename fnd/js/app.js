@@ -67,18 +67,33 @@ app.controller('PatientsCtrl', function($scope, $http){
 
 app.controller('PatientNewCtrl', function($scope, $http){
   $scope.resourse = JSON.stringify({a:1})
+
+  $scope.load_example = function(file){
+    $scope.resourse = "Loading " + file + '...';
+    $http.get(
+      '/data/demo/by_attr',
+      {params: { rel: 'example_resource', col: 'file', val: file}}
+    ).success(function(data){
+      $scope.resourse = JSON.stringify(data.json);
+    })
+  }
+
+  $scope.resources = $http
+  .get('/data/demo', {params: { rel: 'example_resource_list'}})
+  .success(function(data){
+    $scope.resources = data;
+  })
+
   $scope.save = function(){
     $scope.response = "loading..."
+    var res = JSON.parse($scope.resourse)
 
     $http({
       method: 'POST',
-      url: '/post/resource',
-      data: "data=" + JSON.stringify($scope.resourse).replace(/(^"|"$)/g,''), //HACK: ????
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-      }
+      url: '/data/resource/create',
+      data: JSON.stringify(res)
     }).success(function(data){
-      $scope.response = "Patient saved with " + data
+      $scope.response = data
     })
   };
 })
@@ -113,4 +128,3 @@ app.controller('menu', function($scope, $http){
     $scope.items = data;
   })
 })
-

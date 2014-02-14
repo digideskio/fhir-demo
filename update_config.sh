@@ -5,4 +5,4 @@ bin/nginx/sbin/nginx
 echo 'netstat'
 netstat -pant | grep 5555
 echo 'error log'
-tail bin/nginx/logs/error.log
+tail -n 30 bin/nginx/logs/error.log

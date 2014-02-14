@@ -14,9 +14,12 @@ CREATE TABLE app.routes (
 INSERT INTO app.routes
 (method, pattern, handler)
 VALUES
-('get', '/data/about', 'about'),
-('get', '/data/view', 'view'),
-('get', '/data/query', 'query'),
-('get', '/data/resource', 'resource')
+('GET', '/data/about', 'about'),
+('GET', '/data/view', 'view'),
+('GET', '/data/query', 'query'),
+('GET', '/data/resource', 'resource'),
+('GET', '/data/demo', 'demo'),
+('GET', '/data/demo/by_attr', 'demo_by_attr'),
+('POST', '/data/resource/create', 'create_resource')
 ;
 --}}}
