@@ -15,6 +15,8 @@ INSERT INTO app.routes
 (method, pattern, handler)
 VALUES
 ('get', '/data/about', 'about'),
-('get', '/data/views', 'views')
+('get', '/data/view', 'view'),
+('get', '/data/query', 'query'),
+('get', '/data/resource', 'resource')
 ;
 --}}}

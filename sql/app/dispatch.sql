@@ -23,7 +23,7 @@ as $$
     try {
       return plv8.execute("SELECT actions." + route.handler + "($1) as res",[req])[0]['res']
     }catch(e){
-      return e;
+      return {error: e.message};
     }
   } else {
     return {error: 'missing route', req: req }
