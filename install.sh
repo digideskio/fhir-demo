@@ -17,3 +17,4 @@ cd  ngx_openresty-1.5.9.1rc1
 
 make
 make install
+cp env.sh.template env.sh

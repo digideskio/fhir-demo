@@ -4,3 +4,4 @@ fnd/lib/
 bin/
 ngx/pcre-8.34/
 **/Makefile
+env.sh
