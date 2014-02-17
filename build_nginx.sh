@@ -1,3 +1,6 @@
+git submodule init
+git submodule update
+sudo apt-get install libreadline-dev libncurses5-dev libpcre3-dev libssl-dev perl make
 BLD=`pwd`/bin
 cd ngx_openresty/
 
