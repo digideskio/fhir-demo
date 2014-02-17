@@ -50,7 +50,7 @@ as $$
  return plv8.execute(sql)[0]['json'];
 $$;
 
-SELECT actions.resource('{"uri_args": {"type": "patient"}}'::json);
+--SELECT actions.resource('{"uri_args": {"type": "patient"}}'::json);
 --}}}
 
 --{{{
@@ -64,7 +64,7 @@ BEGIN
 END
 $$;
 
-SELECT actions.create_resource('{"request_body": {"resourceType": "Patient"}, "uri_args": {"type": "patient"}}'::json);
+--SELECT actions.create_resource('{"request_body": {"resourceType": "Patient"}, "uri_args": {"type": "patient"}}'::json);
 --}}}
 
 --{{{
@@ -88,6 +88,6 @@ as $$
 $$;
 --}}}
 --{{{
-select * from demo.example_resource_list limit 1;
-SELECT actions.demo_by_attr('{"uri_args": {"rel": "example_resource", "col": "file", "val": "address-use.json"}}'::json);
+--select * from demo.example_resource_list limit 1;
+--SELECT actions.demo_by_attr('{"uri_args": {"rel": "example_resource", "col": "file", "val": "address-use.json"}}'::json);
 --}}}
