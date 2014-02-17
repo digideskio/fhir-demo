@@ -1,4 +1,4 @@
---db:myfhir
+--db:fhir
 --{{{
 CREATE SCHEMA IF NOT EXISTS actions;
 --}}}
@@ -91,3 +91,11 @@ $$;
 --select * from demo.example_resource_list limit 1;
 --SELECT actions.demo_by_attr('{"uri_args": {"rel": "example_resource", "col": "file", "val": "address-use.json"}}'::json);
 --}}}
+
+CREATE SCHEMA IF NOT EXISTS view;
+CREATE OR REPLACE
+VIEW view.resource AS (
+  select unnest(path) as title from meta.resource_elements
+  where array_length(path,1) = 1
+  order by title
+);
