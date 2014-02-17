@@ -92,6 +92,7 @@ $$;
 --SELECT actions.demo_by_attr('{"uri_args": {"rel": "example_resource", "col": "file", "val": "address-use.json"}}'::json);
 --}}}
 
+--}}}
 CREATE SCHEMA IF NOT EXISTS view;
 CREATE OR REPLACE
 VIEW view.resource AS (
@@ -99,3 +100,4 @@ VIEW view.resource AS (
   where array_length(path,1) = 1
   order by title
 );
+--}}}
