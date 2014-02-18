@@ -32,10 +32,59 @@ RETURNS json
 language plv8
 as $$
  return plv8.execute("SELECT array_to_json(array_agg(row_to_json(t.*)))::varchar as json from test.expanded_resource_tables t where resource_name = '" + req.uri_args.resource + "'")[0]['json']
-resource_name
 $$;
 
 SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
+--}}}
+--{{{
+select * from test.expanded_resource_tables;
+--}}}
+
+--{{{
+CREATE or REPLACE
+FUNCTION actions.details(req json)
+RETURNS json
+language plv8
+as $$
+  var resource_type = plv8.execute("SELECT r.resource_type from fhir.resource r where r.id = '" + req.uri_args.resource_id + "'")[0]['resource_type'];
+  var resource_tables = plv8.execute("SELECT t.* from test.expanded_resource_tables t where resource_name = '" + resource_type + "'");
+  var res = [];
+  for(var i=0; i<resource_tables.length; i++){
+				var table_name = resource_tables[i]['table_name'];
+				if (table_name != 'patient_photo') {
+				var columns = resource_tables[i]['columns'];
+				var where = 'id'
+				for (var j=0; j< columns.length; j++) {
+								if (columns[j]['column_name'] == 'resource_id') {
+												where = 'resource_id';
+												}
+								}
+				var sel = plv8.execute("SELECT * from fhir." + table_name + " where " + where + " = '" + req.uri_args.resource_id + "'");
+				if (sel.length > 0) {
+								var headers = [];
+								for(var k in sel[0]) {
+												var is = false;
+												for(var m=0;m<sel.length;m++){
+																if (sel[m][k]) {
+																is = true;
+																}
+																}
+												if (is) {headers.push(k);}
+												}
+								var obj = {'table_name': table_name, headers: headers, data: sel};
+								res.push(obj);
+				}
+				}
+		}
+	 return JSON.stringify(res);
+$$;
+
+SELECT actions.details(('{"uri_args": {"resource_id": "' || (select id from fhir.resource limit 1)::varchar || '"}}')::json);
+--}}}
+
+--{{{
+
+select * from fhir.resource where id = resouce_id;
 --}}}
 
 --{{{
@@ -63,7 +112,7 @@ as $$
  return plv8.execute(sql)[0]['json'];
 $$;
 
---SELECT actions.resource('{"uri_args": {"type": "patient"}}'::json);
+SELECT actions.resource('{"uri_args": {"type": "patient"}}'::json);
 --}}}
 
 --{{{

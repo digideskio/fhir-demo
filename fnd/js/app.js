@@ -101,6 +101,10 @@ app.controller('PatientNewCtrl', function($scope, $http){
 app.controller('PatientShowCtrl',
     function($scope, $http, $routeParams){
   $scope.params = $routeParams
+  $scope.items = $http.get('/data/details', {params: { resource_id: $routeParams.id}})
+  .success(function(data){
+    $scope.items = data;
+  })
 });
 
 app.controller('ResourcesCtrl', function($scope, $http){

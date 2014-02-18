@@ -1,5 +1,23 @@
 <div>
   <h1 class="page-header"> Patient: {{ params.id }} </h1>
   <a href="#/patients.html">Back</a>
-  <pre> {{ params }} </pre>
+</div>
+<div ng-repeat="item in items" class="alert alert-error">
+				<table class='table table-bordered'>
+								<caption class="alert-success" style='padding: 5px 0; font-weight: bold; font-size: 150%'>{{item.table_name}}</caption>
+								<thead>
+												<tr>
+												<th ng-repeat="head in item.headers">
+																{{head}}
+												</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr ng-repeat="row in item.data">
+								<td ng-repeat="head in item.headers">
+												{{row[head]}}
+								</td>
+								</tr>
+								</tbody>
+				</table>
 </div>
