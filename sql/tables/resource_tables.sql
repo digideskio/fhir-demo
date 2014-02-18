@@ -37,7 +37,8 @@ create view test.expanded_resource_tables as
     rt.resource_name,
     rt.table_name,
     array_to_json(array_agg((i.column_name, i.data_type)::test.column_desc order by i.ordinal_position)) as columns
-  from test.resource_tables rt join information_schema.columns i on i.table_name = rt.table_name
+  from test.resource_tables rt
+  join information_schema.columns i on i.table_name = rt.table_name and i.table_schema = 'fhir'
   group by rt.resource_name, rt.table_name;
 
 create view test.resource_description as
