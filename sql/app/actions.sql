@@ -19,7 +19,7 @@ FUNCTION actions.view(req json)
 RETURNS json
 language plv8
 as $$
- return plv8.execute( "SELECT array_to_json(array_agg(row_to_json(t.*)))::varchar as json from view." + req.uri_args.view + ' t')[0]['json']
+  return plv8.execute( "SELECT array_to_json(array_agg(row_to_json(t.*)))::varchar as json from view." + req.uri_args.view + ' t')[0]['json'];
 $$;
 
 SELECT actions.view('{"uri_args": {"view": "resource"}}'::json);
@@ -37,6 +37,8 @@ $$;
 SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
 --}}}
 --{{{
+\dv from fhir.view_patient;
+select * from fhir.resource;
 select * from test.expanded_resource_tables;
 --}}}
 
@@ -110,6 +112,15 @@ FUNCTION actions.resource(req json)
 RETURNS json
 language plv8
 as $$
+  var res = [];
+  var list = plv8.execute('select id, _type from fhir.resource');
+  for(var i=0; i<list.length; i++){
+				var id = list[i]['id'];
+				var view = list[i]['_type'];
+				var obj = plv8.execute( "SELECT t.json from fhir.view_" + view + ' t')[0]['json'];
+				res.push(obj);
+				}
+	 return JSON.stringify(res);
  var sql =  "SELECT array_to_json(array_agg(t.json))::varchar as json from fhir.view_" + req.uri_args.type + ' t limit 100'
  plv8.elog(NOTICE, sql)
  return plv8.execute(sql)[0]['json'];
