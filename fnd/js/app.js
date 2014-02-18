@@ -113,6 +113,10 @@ app.controller('ResourcesCtrl', function($scope, $http){
 app.controller('ResourceShowCtrl',
     function($scope, $http, $routeParams){
   $scope.params = $routeParams
+  $scope.items = $http.get('/data/show', {params: { resource: $routeParams.resource}})
+  .success(function(data){
+    $scope.items = data;
+  })
 });
 
 app.controller('CoursesCtrl', function($scope, $http){

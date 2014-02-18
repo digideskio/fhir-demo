@@ -1,4 +1,12 @@
 <div>
   <h1 class="page-header"> Resource: {{ params.resource }} </h1>
-  <pre> {{ params }} </pre>
+  <pre> consist of {{ items.length }} tables </pre>
+</div>
+<div class="row" ng-controller="ResourceShowCtrl">
+				<div ng-repeat="item in items">
+								<h2>{{item.table_name}}</h2>
+								<div ng-repeat="column in item.columns">
+												<pre>{{column.column_name}} :: {{column.data_type}}</pre>
+								</div>
+				</div>
 </div>

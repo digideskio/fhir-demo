@@ -1,4 +1,4 @@
---db:fhir
+--db:myfhir
 --{{{
 CREATE SCHEMA IF NOT EXISTS actions;
 --}}}
@@ -23,6 +23,19 @@ as $$
 $$;
 
 SELECT actions.view('{"uri_args": {"view": "resource"}}'::json);
+--}}}
+
+--{{{
+CREATE or REPLACE
+FUNCTION actions.show(req json)
+RETURNS json
+language plv8
+as $$
+ return plv8.execute("SELECT array_to_json(array_agg(row_to_json(t.*)))::varchar as json from test.expanded_resource_tables t where resource_name = '" + req.uri_args.resource + "'")[0]['json']
+resource_name
+$$;
+
+SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
 --}}}
 
 --{{{

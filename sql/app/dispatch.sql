@@ -16,6 +16,7 @@ INSERT INTO app.routes
 VALUES
 ('GET', '/data/about', 'about'),
 ('GET', '/data/view', 'view'),
+('GET', '/data/show', 'show'),
 ('GET', '/data/query', 'query'),
 ('GET', '/data/resource', 'resource'),
 ('GET', '/data/demo', 'demo'),
