@@ -46,11 +46,13 @@ FUNCTION actions.details(req json)
 RETURNS json
 language plv8
 as $$
-  var resource_type = plv8.execute("SELECT r.resource_type from fhir.resource r where r.id = '" + req.uri_args.resource_id + "'")[0]['resource_type'];
+  var resource_id = req.uri_args.resource_id;
+  var resource_type = plv8.execute("SELECT r.resource_type from fhir.resource r where r.id = '" + resource_id + "'")[0]['resource_type'];
   var resource_tables = plv8.execute("SELECT t.* from test.expanded_resource_tables t where resource_name = '" + resource_type + "'");
   var res = [];
   for(var i=0; i<resource_tables.length; i++){
 				var table_name = resource_tables[i]['table_name'];
+				var resource_name = resource_tables[i]['resource_name'];
 				if (table_name != 'patient_photo') {
 				var columns = resource_tables[i]['columns'];
 				var where = 'id'
@@ -59,7 +61,7 @@ as $$
 												where = 'resource_id';
 												}
 								}
-				var sel = plv8.execute("SELECT * from fhir." + table_name + " where " + where + " = '" + req.uri_args.resource_id + "'");
+				var sel = plv8.execute("SELECT * from fhir." + table_name + " where " + where + " = '" + resource_id + "'");
 				if (sel.length > 0) {
 								var headers = [];
 								for(var k in sel[0]) {
@@ -76,7 +78,8 @@ as $$
 				}
 				}
 		}
-	 return JSON.stringify(res);
+   var json = {'resource_name': resource_name, 'resource_id': resource_id, data: res}
+	 return JSON.stringify(json);
 $$;
 
 SELECT actions.details(('{"uri_args": {"resource_id": "' || (select id from fhir.resource limit 1)::varchar || '"}}')::json);

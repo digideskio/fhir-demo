@@ -1,10 +1,10 @@
 <div>
-  <h1 class="page-header"> Patient: {{ params.id }} </h1>
+				<h1 class="page-header"> {{resource_name}}: {{ resource_id }} </h1>
   <a href="#/patients.html">Back</a>
 </div>
 <div ng-repeat="item in items" class="alert alert-error">
 				<table class='table table-bordered'>
-								<caption class="alert-success" style='padding: 5px 0; font-weight: bold; font-size: 150%'>{{item.table_name}}</caption>
+								<caption class="alert-success" style='padding: 5px 0; font-weight: bold; font-size: 150%;'>{{item.table_name}}</caption>
 								<thead>
 												<tr>
 												<th ng-repeat="head in item.headers">

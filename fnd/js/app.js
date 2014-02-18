@@ -100,10 +100,11 @@ app.controller('PatientNewCtrl', function($scope, $http){
 
 app.controller('PatientShowCtrl',
     function($scope, $http, $routeParams){
-  $scope.params = $routeParams
-  $scope.items = $http.get('/data/details', {params: { resource_id: $routeParams.id}})
+  $http.get('/data/details', {params: { resource_id: $routeParams.id}})
   .success(function(data){
-    $scope.items = data;
+    $scope.resource_id = data.resource_id;
+    $scope.resource_name = data.resource_name;
+    $scope.items = data.data;
   })
 });
 
