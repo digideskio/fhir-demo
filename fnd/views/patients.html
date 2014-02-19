@@ -17,6 +17,13 @@
   </table>
 </div>
 <div>
+<div class="col-md-4">
+				<ul class="nav nav-pills nav-stacked">
+								<li ng-repeat="query in queries">
+									<a ng-click="set_query(query.query)">{{query.query}}</a>
+								</li>
+				</ul>
+</div>
 <textarea ng-model="query" cols="100"/>
 <div>
 				<button ng-click="execute_query()">Execute Query</button>

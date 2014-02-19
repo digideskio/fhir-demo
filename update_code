@@ -5,6 +5,7 @@ cat sql/app/dispatch.sql | psql -d $PGDATABASE
 cat sql/app/routes.sql | psql -d $PGDATABASE
 cat sql/app/actions.sql | psql -d $PGDATABASE
 cat sql/tables/example_resources.sql | psql -d $PGDATABASE
+cat sql/tables/queries.sql | psql -d $PGDATABASE
 
 # upload fhir resources into example table
 

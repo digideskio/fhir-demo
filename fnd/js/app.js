@@ -55,6 +55,13 @@ app.controller('PatientsCtrl', function($scope, $http){
       $scope.query_items = data;
     })
   }
+  $http.get('/data/demo', {params: { rel: 'queries'}})
+  .success(function(data){
+    $scope.queries = data;
+  })
+  $scope.set_query = function(query) {
+    $scope.query = query;
+  }
 })
 
 .filter('humanName', function() {
