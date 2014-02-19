@@ -44,10 +44,17 @@ app.config(['$routeProvider','$locationProvider',
 app.controller('IndexCtrl', function($scope, $http){ })
 
 app.controller('PatientsCtrl', function($scope, $http){
-  $scope.items = $http.get('/data/resource', {params: {type: 'patient'}})
+  $http.get('/data/resource', {params: {type: 'patient'}})
   .success(function(data){
     $scope.items = data;
   })
+  $scope.query = 'select * from fhir.view_patient order by id'
+  $scope.execute_query = function() {
+    $http.get('/data/query', {params: {q: $scope.query}})
+    .success(function(data){
+      $scope.query_items = data;
+    })
+  }
 })
 
 .filter('humanName', function() {

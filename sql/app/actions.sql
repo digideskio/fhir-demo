@@ -37,7 +37,7 @@ $$;
 SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
 --}}}
 --{{{
-\dv from fhir.view_patient;
+\dV from fhir.view_patient;
 select * from fhir.resource;
 select * from test.expanded_resource_tables;
 --}}}

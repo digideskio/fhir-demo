@@ -3,7 +3,10 @@
   <table class="table">
     <tr ng-repeat="item in items">
 			<td>
-							{{item.resourceType}}
+							<a href="#/patients/{{item.id}}.html">{{item.resourceType}}</a>
+			</td>
+			<td>
+							<a href="#/patients/{{item.id}}.html">{{item.id}}</a>
 			</td>
       <td>
         <a href="#/patients/{{item.id}}.html">{{item.name | humanName}}</a>
@@ -12,5 +15,12 @@
         {{item.gender.coding[0].display}}
       </td>
   </table>
-  <pre>{{items | json}}</pre>
+</div>
+<div>
+<textarea ng-model="query" cols="100"/>
+<div>
+				<button ng-click="execute_query()">Execute Query</button>
+</div>
+<pre>{{query}}</pre>
+<pre>{{query_items | json}}</pre>
 </div>
