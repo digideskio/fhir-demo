@@ -1,12 +1,23 @@
 <div>
-  <h1 class="page-header"> Resource: {{ params.resource }} </h1>
-  <pre> consist of {{ items.length }} tables </pre>
+  <h1 class="page-header"> Resource: {{ params.resource }}</h1>
+  <a href="#/index.html">Back</a>
 </div>
-<div class="row" ng-controller="ResourceShowCtrl">
-				<div ng-repeat="item in items">
-								<h2>{{item.table_name}}</h2>
-								<div ng-repeat="column in item.columns">
-												<pre>{{column.column_name}} :: {{column.data_type}}</pre>
-								</div>
-				</div>
+<div ng-repeat="item in items" class="alert alert-error">
+				<table class='table table-bordered'>
+								<caption class="alert-success" style='padding: 5px 0; font-weight: bold; font-size: 150%;'>{{item.table_name}}</caption>
+								<thead>
+												<tr>
+												<th ng-repeat="column in item.columns">
+																{{column.column_name}}
+												</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr>
+								<td ng-repeat="column in item.columns">
+												{{column.data_type}}
+								</td>
+								</tr>
+								</tbody>
+				</table>
 </div>
