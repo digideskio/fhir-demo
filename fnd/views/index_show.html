@@ -1,21 +1,21 @@
 <div>
-				<h1 class="page-header"> {{resource_name}}: {{ resource_id }} </h1>
-  <a href="#/resources.html">Back</a>
+  <h1 class="page-header"> Resource: {{ params.resource }}</h1>
+  <a href="#/index.html">Back</a>
 </div>
 <div ng-repeat="item in items" class="alert alert-error">
 				<table class='table table-bordered'>
 								<caption class="alert-success" style='padding: 5px 0; font-weight: bold; font-size: 150%;'>{{item.table_name}}</caption>
 								<thead>
 												<tr>
-												<th ng-repeat="head in item.headers">
-																{{head}}
+												<th ng-repeat="column in item.columns">
+																{{column.column_name}}
 												</th>
 								</tr>
 								</thead>
 								<tbody>
-								<tr ng-repeat="row in item.data">
-								<td ng-repeat="head in item.headers">
-												{{row[head]}}
+								<tr>
+								<td ng-repeat="column in item.columns">
+												{{column.data_type}}
 								</td>
 								</tr>
 								</tbody>

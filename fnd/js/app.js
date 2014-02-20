@@ -12,6 +12,10 @@ app.config(['$routeProvider','$locationProvider',
         templateUrl: 'views/index.html',
         controller: 'IndexCtrl'
       }).
+      when('/index/:resource.html', {
+        templateUrl: 'views/index_show.html',
+        controller: 'IndexShowCtrl'
+      }).
       when('/resources.html', {
         templateUrl: 'views/resources.html',
         controller: 'ResourcesCtrl'
@@ -47,6 +51,15 @@ app.controller('IndexCtrl', function($scope, $http){
     $scope.items = data;
   })
 })
+
+app.controller('IndexShowCtrl',
+    function($scope, $http, $routeParams){
+  $scope.params = $routeParams
+  $scope.items = $http.get('/data/show', {params: { resource: $routeParams.resource}})
+  .success(function(data){
+    $scope.items = data;
+  })
+});
 
 app.controller('PatientsCtrl', function($scope, $http){
   $http.get('/data/resource', {params: {type: 'patient'}})
