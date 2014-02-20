@@ -41,7 +41,12 @@ app.config(['$routeProvider','$locationProvider',
       });
 }]);
 
-app.controller('IndexCtrl', function($scope, $http){ })
+app.controller('IndexCtrl', function($scope, $http){
+ $http.get('/data/view', {params: { view: 'resource'}})
+  .success(function(data){
+    $scope.items = data;
+  })
+})
 
 app.controller('PatientsCtrl', function($scope, $http){
   $http.get('/data/resource', {params: {type: 'patient'}})
@@ -123,7 +128,7 @@ app.controller('PatientShowCtrl',
 });
 
 app.controller('ResourcesCtrl', function($scope, $http){
-  $scope.items = $http.get('/data/view', {params: { view: 'resource'}})
+  $http.get('/data/resource', {params: {type: 'patient'}})
   .success(function(data){
     $scope.items = data;
   })

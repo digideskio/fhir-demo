@@ -1,5 +1,5 @@
 [
   {"label": "FHIRbase", "name": "index"},
   {"label": "Resources", "name": "resources"},
-  {"label": "Patient", "name": "patients"}
+  {"label": "Queries", "name": "queries"}
 ]
