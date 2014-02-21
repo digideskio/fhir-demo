@@ -82,8 +82,9 @@ app.controller('ResourcesCtrl', function($scope, $http){
   }
 });
 
-app.controller('ResourceNewCtrl', function($scope, $http){
+app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $location, $rootScope, $timeout){
   $scope.resourse = JSON.stringify({a:1})
+  $scope.example_search = {file: $routeParams.search}
 
   $scope.load_example = function(file){
     $scope.resourse = "Loading " + file + '...';
@@ -99,6 +100,20 @@ app.controller('ResourceNewCtrl', function($scope, $http){
   .get('/data/demo', {params: { rel: 'example_resource_list'}})
   .success(function(data){
     $scope.resources = data;
+    if ($routeParams.search) {
+      for(var i=0;i<$scope.resources.length;i++){
+        var res = $scope.resources[i];
+        if (res.file.match(new RegExp($routeParams.search, 'i'))) {
+            $http.get(
+              '/data/demo/by_attr',
+              {params: { rel: 'example_resource', col: 'file', val: res.file}}
+            ).success(function(data){
+              $scope.resourse = JSON.stringify(data.json);
+            })
+            break;
+          }
+      }
+    }
   })
 
   $scope.save = function(){
@@ -111,6 +126,8 @@ app.controller('ResourceNewCtrl', function($scope, $http){
       data: JSON.stringify(res)
     }).success(function(data){
       $scope.response = data
+      var path = "/#/resources/" + data.id + ".html";
+      document.location.href = path;
     })
   };
 })

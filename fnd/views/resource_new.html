@@ -7,7 +7,7 @@
     <div class="col-md-4">
       <ul class="nav nav-pills nav-stacked">
         <input class="form-control" type="text" placeholder="search" ng-model="example_search.file"/>
-        <li ng-repeat="item in resources | filter:example_search">
+        <li ng-repeat="item in (filteredItems = (resources | filter:example_search))">
           <a ng-click="load_example(item.file)"> {{ item.file }}</a>
         </li>
       </ul>

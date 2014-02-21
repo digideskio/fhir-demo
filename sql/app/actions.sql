@@ -156,11 +156,14 @@ FUNCTION actions.create_resource(body json)
 RETURNS json
 language plpgsql AS $$
 BEGIN
-  RETURN row_to_json(ROW(fhir.insert_resource(body->'request_body')));
+  RETURN ('{"id": "' || fhir.insert_resource(body->'request_body') || '"}')::json;
 END
 $$;
 
---SELECT actions.create_resource('{"request_body": {"resourceType": "Patient"}, "uri_args": {"type": "patient"}}'::json);
+SELECT actions.create_resource('{"request_body": {"resourceType": "Patient"}, "uri_args": {"type": "patient"}}'::json);
+--}}}
+--{{{
+SELECT ('{"id": "' || fhir.insert_resource('{"resourceType": "Patient"}'::json) || '"}')::json;
 --}}}
 
 --{{{
