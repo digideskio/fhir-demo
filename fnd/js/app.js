@@ -124,6 +124,7 @@ app.controller('QueriesCtrl', function($scope, $http){
     $scope.items = data;
   })
   $scope.query = 'select * from fhir.view_patient order by id'
+  $scope.query_items = [];
   $scope.execute_query = function() {
     $http.get('/data/query', {params: {q: $scope.query}})
     .success(function(data){

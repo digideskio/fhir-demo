@@ -115,7 +115,12 @@ language plv8
 as $$
  var sql =  "SELECT array_to_json(array_agg(row_to_json(t.*)))::varchar as json from (" + req.uri_args.q + ") t"
  plv8.elog(NOTICE, sql)
- return plv8.execute(sql)[0]['json']
+ var resultates = plv8.execute(sql);
+ if (resultates[0]['json']) {
+   return resultates[0]['json'];
+ } else {
+  return ['there is no result (n\'existe pas)'];
+ }
 $$;
 
 SELECT actions.query('{"uri_args": {"q": "select * from fhir.patient"}}'::json);
