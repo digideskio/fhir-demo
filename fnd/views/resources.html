@@ -1,15 +1,15 @@
 <div class="resources">
-  <h1 class="page-header"> Resources <a href="#/patients/new.html" class="btn btn-success">Upload</a> </h1>
+  <h1 class="page-header"> Resources <a href="#/resources/new.html" class="btn btn-success">Upload</a> </h1>
   <table class="table">
     <tr ng-repeat="item in items">
 			<td>
-							<a href="#/patients/{{item.id}}.html">{{item.resourceType}}</a>
+							<a href="#/resources/{{item.id}}.html">{{item.resourceType}}</a>
 			</td>
 			<td>
-							<a href="#/patients/{{item.id}}.html">{{item.id}}</a>
+							<a href="#/resources/{{item.id}}.html">{{item.id}}</a>
 			</td>
       <td>
-       		<a ng-click="delete_resource(item.id)" class="btn btn-success">Delete</a>
+       		<a ng-click="delete_resource(item)" class="btn btn-success">Delete</a>
       </td>
   </table>
 </div>

@@ -37,7 +37,22 @@ $$;
 SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
 --}}}
 --{{{
-\dV from fhir.view_patient;
+drop function if exists actions.delete_resource(json);
+CREATE or REPLACE
+FUNCTION actions.delete_resource(req json)
+RETURNS varchar
+language plv8
+as $$
+ var resource_id = req.uri_args.resource_id;
+ var sql = "select fhir.delete_resource('" + resource_id + "'::uuid)";
+ plv8.elog(NOTICE, sql);
+ plv8.execute(sql);
+ return resource_id;
+$$;
+
+SELECT actions.delete_resource(('{"uri_args": {"resource_id": "' || (select id from fhir.resource limit 1)::varchar || '"}}')::json);
+--}}}
+--{{{
 select * from fhir.resource;
 select * from test.expanded_resource_tables;
 --}}}

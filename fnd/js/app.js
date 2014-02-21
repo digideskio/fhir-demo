@@ -20,6 +20,14 @@ app.config(['$routeProvider','$locationProvider',
         templateUrl: 'views/resources.html',
         controller: 'ResourcesCtrl'
       }).
+      when('/resources/new.html', {
+        templateUrl: 'views/resource_new.html',
+        controller: 'ResourceNewCtrl'
+      }).
+      when('/resources/:id.html', {
+        templateUrl: 'views/resource_show.html',
+        controller: 'ResourceShowCtrl'
+      }).
       when('/resources/:resource.html', {
         templateUrl: 'views/resource_show.html',
         controller: 'ResourceShowCtrl'
@@ -50,54 +58,32 @@ app.controller('IndexCtrl', function($scope, $http){
   .success(function(data){
     $scope.items = data;
   })
-})
+});
 
 app.controller('IndexShowCtrl',
     function($scope, $http, $routeParams){
   $scope.params = $routeParams
-  $scope.items = $http.get('/data/show', {params: { resource: $routeParams.resource}})
+  $http.get('/data/show', {params: { resource: $routeParams.resource}})
   .success(function(data){
     $scope.items = data;
   })
 });
 
-app.controller('PatientsCtrl', function($scope, $http){
+app.controller('ResourcesCtrl', function($scope, $http){
   $http.get('/data/resource', {params: {type: 'patient'}})
   .success(function(data){
     $scope.items = data;
   })
-  $scope.query = 'select * from fhir.view_patient order by id'
-  $scope.execute_query = function() {
-    $http.get('/data/query', {params: {q: $scope.query}})
+  $scope.delete_resource = function(item){
+    console.log(item.id);
+    $http.get('/data/delete', {params: { 'resource_id': item.id}})
     .success(function(data){
-      $scope.query_items = data;
+      $scope.items.splice($scope.items.indexOf(item), 1);
     })
   }
-  $http.get('/data/demo', {params: { rel: 'queries'}})
-  .success(function(data){
-    $scope.queries = data;
-  })
-  $scope.set_query = function(query) {
-    $scope.query = query;
-  }
-})
-
-.filter('humanName', function() {
-    return function(name) {
-      if(! name){
-        return 'Ups :('
-      }
-      else {
-        return name.map(function(nm){
-          return (nm.prefix || []).join(' ') + ' ' +
-                 (nm.family || []).join(' ') + ' ' +
-                 (nm.given || []).join(' ');
-        }).join('; ')
-      }
-    };
 });
 
-app.controller('PatientNewCtrl', function($scope, $http){
+app.controller('ResourceNewCtrl', function($scope, $http){
   $scope.resourse = JSON.stringify({a:1})
 
   $scope.load_example = function(file){
@@ -130,7 +116,7 @@ app.controller('PatientNewCtrl', function($scope, $http){
   };
 })
 
-app.controller('PatientShowCtrl',
+app.controller('ResourceShowCtrl',
     function($scope, $http, $routeParams){
   $http.get('/data/details', {params: { resource_id: $routeParams.id}})
   .success(function(data){
@@ -140,21 +126,26 @@ app.controller('PatientShowCtrl',
   })
 });
 
-app.controller('ResourcesCtrl', function($scope, $http){
+app.controller('PatientsCtrl', function($scope, $http){
   $http.get('/data/resource', {params: {type: 'patient'}})
   .success(function(data){
     $scope.items = data;
   })
-})
-
-app.controller('ResourceShowCtrl',
-    function($scope, $http, $routeParams){
-  $scope.params = $routeParams
-  $scope.items = $http.get('/data/show', {params: { resource: $routeParams.resource}})
+  $scope.query = 'select * from fhir.view_patient order by id'
+  $scope.execute_query = function() {
+    $http.get('/data/query', {params: {q: $scope.query}})
+    .success(function(data){
+      $scope.query_items = data;
+    })
+  }
+  $http.get('/data/demo', {params: { rel: 'queries'}})
   .success(function(data){
-    $scope.items = data;
+    $scope.queries = data;
   })
-});
+  $scope.set_query = function(query) {
+    $scope.query = query;
+  }
+})
 
 app.controller('CoursesCtrl', function($scope, $http){
   $scope.items = $http.get('/data/public_course')
