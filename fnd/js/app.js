@@ -32,17 +32,9 @@ app.config(['$routeProvider','$locationProvider',
         templateUrl: 'views/resource_show.html',
         controller: 'ResourceShowCtrl'
       }).
-      when('/patients.html', {
-        templateUrl: 'views/patients.html',
-        controller: 'PatientsCtrl'
-      }).
-      when('/patients/new.html', {
-        templateUrl: 'views/patient_new.html',
-        controller: 'PatientNewCtrl'
-      }).
-      when('/patients/:id.html', {
-        templateUrl: 'views/patient_show.html',
-        controller: 'PatientShowCtrl'
+      when('/queries.html', {
+        templateUrl: 'views/queries.html',
+        controller: 'QueriesCtrl'
       }).
       when('/about.html', {
         templateUrl: 'views/about.html',
@@ -126,7 +118,7 @@ app.controller('ResourceShowCtrl',
   })
 });
 
-app.controller('PatientsCtrl', function($scope, $http){
+app.controller('QueriesCtrl', function($scope, $http){
   $http.get('/data/resource', {params: {type: 'patient'}})
   .success(function(data){
     $scope.items = data;
