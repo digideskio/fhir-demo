@@ -126,8 +126,10 @@ app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $locatio
       data: JSON.stringify(res)
     }).success(function(data){
       $scope.response = data
-      var path = "/#/resources/" + data.id + ".html";
-      document.location.href = path;
+      if (data.id) {
+        var path = "/#/resources/" + data.id + ".html";
+        document.location.href = path;
+      }
     })
   };
 })
