@@ -12,9 +12,13 @@ app.config(['$routeProvider','$locationProvider',
         templateUrl: 'views/index.html',
         controller: 'IndexCtrl'
       }).
-      when('/index/:resource.html', {
-        templateUrl: 'views/index_show.html',
-        controller: 'IndexShowCtrl'
+      when('/base.html', {
+        templateUrl: 'views/base.html',
+        controller: 'BaseCtrl'
+      }).
+      when('/base/:resource.html', {
+        templateUrl: 'views/base_show.html',
+        controller: 'BaseShowCtrl'
       }).
       when('/resources.html', {
         templateUrl: 'views/resources.html',
@@ -46,13 +50,16 @@ app.config(['$routeProvider','$locationProvider',
 }]);
 
 app.controller('IndexCtrl', function($scope, $http){
+});
+
+app.controller('BaseCtrl', function($scope, $http){
  $http.get('/data/view', {params: { view: 'resource'}})
   .success(function(data){
     $scope.items = data;
   })
 });
 
-app.controller('IndexShowCtrl',
+app.controller('BaseShowCtrl',
     function($scope, $http, $routeParams){
   $scope.params = $routeParams
   $http.get('/data/show', {params: { resource: $routeParams.resource}})
