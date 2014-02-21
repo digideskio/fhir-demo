@@ -149,18 +149,26 @@ app.controller('QueriesCtrl', function($scope, $http){
   .success(function(data){
     $scope.items = data;
   })
+  $http.get('/data/tables', {params: {}})
+  .success(function(data){
+    $scope.tables = data;
+  });
+
   $scope.query = 'select * from fhir.view_patient order by id'
   $scope.query_items = [];
+
   $scope.execute_query = function() {
     $http.get('/data/query', {params: {q: $scope.query}})
     .success(function(data){
       $scope.query_items = data;
     })
   }
+
   $http.get('/data/demo', {params: { rel: 'queries'}})
   .success(function(data){
     $scope.queries = data;
   })
+
   $scope.set_query = function(query) {
     $scope.query = query;
   }

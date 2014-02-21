@@ -24,6 +24,13 @@ $$;
 
 SELECT actions.view('{"uri_args": {"view": "resource"}}'::json);
 --}}}
+CREATE or REPLACE
+FUNCTION actions.get_tables(req json)
+RETURNS json
+language plv8
+as $$
+ return plv8.execute("SELECT array_to_json(array_agg(t.*)) as json from test.expanded_resource_tables t")[0]['json']
+$$;
 
 --{{{
 CREATE or REPLACE

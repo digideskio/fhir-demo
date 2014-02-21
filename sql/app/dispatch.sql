@@ -17,6 +17,7 @@ VALUES
 ('GET', '/data/about', 'about'),
 ('GET', '/data/view', 'view'),
 ('GET', '/data/show', 'show'),
+('GET', '/data/tables', 'get_tables'),
 ('GET', '/data/delete', 'delete_resource'),
 ('GET', '/data/details', 'details'),
 ('GET', '/data/query', 'query'),
