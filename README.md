@@ -4,8 +4,8 @@
 * Install fhirbase
 * ./install
 * bash install_fnd
-* ./update_config
-* ./update_code
+* ./configure_nginx
+* ./compile
 
 ## TODO
 ### Demo structure
