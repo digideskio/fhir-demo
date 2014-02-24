@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 . ./env.sh
 
-cat sql/app/dispatch.sql | psql -d $PGDATABASE
-cat sql/app/routes.sql | psql -d $PGDATABASE
-cat sql/app/actions.sql | psql -d $PGDATABASE
-cat sql/tables/example_resources.sql | psql -d $PGDATABASE
-cat sql/tables/queries.sql | psql -d $PGDATABASE
+cat sql/app/dispatch.sql | psql  -p $PGPORT -d $PGDATABASE
+cat sql/app/routes.sql | psql  -p $PGPORT -d $PGDATABASE
+cat sql/app/actions.sql | psql  -p $PGPORT -d $PGDATABASE
+cat sql/tables/example_resources.sql | psql  -p $PGPORT -d $PGDATABASE
+cat sql/tables/queries.sql | psql  -p $PGPORT -d $PGDATABASE
 
 # upload fhir resources into example table
 
@@ -16,8 +16,8 @@ do
   echo "\\set json \`cat $f\`" >> /tmp/tmp.sql
   echo "INSERT INTO demo.example_resource (file, json) VALUES (E'$f', :'json'::json);" >> /tmp/tmp.sql
 done
-psql -d $PGDATABASE -c "TRUNCATE TABLE demo.example_resource"
-cat /tmp/tmp.sql | psql -d $PGDATABASE
-psql -d $PGDATABASE -c "UPDATE demo.example_resource SET file = replace(file, '../../data/', '');"
-psql -d $PGDATABASE -c "select count(*) from demo.example_resource"
+psql  -p $PGPORT -d $PGDATABASE -c "TRUNCATE TABLE demo.example_resource"
+cat /tmp/tmp.sql | psql  -p $PGPORT -d $PGDATABASE
+psql  -p $PGPORT -d $PGDATABASE -c "UPDATE demo.example_resource SET file = replace(file, '../../data/', '');"
+psql  -p $PGPORT -d $PGDATABASE -c "select count(*) from demo.example_resource"
 
