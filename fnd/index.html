@@ -29,9 +29,18 @@
   <body>
 
     <div class="container">
+      <!--
+        <div class="masthead">
+          <ul class="nav nav-justified" ng-controller="menu">
+            <li ng-repeat="item in items"><a href="#{{item.name}}.html">{{item.label}}</a></li>
+          </ul>
+        </div>
+      -->
       <div class="masthead">
         <ul class="nav nav-justified" ng-controller="menu">
-          <li ng-repeat="item in items"><a href="#{{item.name}}.html">{{item.label}}</a></li>
+          <li><a href="#/index.html">Home</a></li>
+          <li><a href="#/guide/about.html">Guide</a></li>
+          <li><a href="#/demo/before.html">Demo</a></li>
         </ul>
       </div>
 

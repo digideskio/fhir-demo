@@ -12,37 +12,41 @@ app.config(['$routeProvider','$locationProvider',
         templateUrl: 'views/index.html',
         controller: 'IndexCtrl'
       }).
-      when('/base.html', {
-        templateUrl: 'views/base.html',
+      when('/demo/before.html', {
+        templateUrl: 'views/demo/before.html'
+      }).
+      when('/demo/resources_meta.html', {
+        templateUrl: 'views/demo/resources_meta.html',
         controller: 'BaseCtrl'
       }).
-      when('/base/:resource.html', {
-        templateUrl: 'views/base_show.html',
+      when('/demo/resources_meta/:resource.html', {
+        templateUrl: 'views/demo/resource_meta_show.html',
         controller: 'BaseShowCtrl'
       }).
-      when('/resources.html', {
-        templateUrl: 'views/resources.html',
+      when('/demo/resources.html', {
+        templateUrl: 'views/demo/resources.html',
         controller: 'ResourcesCtrl'
       }).
-      when('/resources/new.html', {
-        templateUrl: 'views/resource_new.html',
+      when('/demo/resources/new.html', {
+        templateUrl: 'views/demo/resource_new.html',
         controller: 'ResourceNewCtrl'
       }).
-      when('/resources/:id.html', {
-        templateUrl: 'views/resource_show.html',
+      when('/demo/resources/:id.html', {
+        templateUrl: 'views/demo/resource_show.html',
         controller: 'ResourceShowCtrl'
       }).
-      when('/resources/:resource.html', {
-        templateUrl: 'views/resource_show.html',
-        controller: 'ResourceShowCtrl'
-      }).
-      when('/queries.html', {
-        templateUrl: 'views/queries.html',
+      when('/demo/queries.html', {
+        templateUrl: 'views/demo/queries.html',
         controller: 'QueriesCtrl'
       }).
       when('/about.html', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
+      }).
+      when('/guide/:step.html', {
+        templateUrl: function(params) {
+          return 'views/guide/' + params.step + '.html';
+        }
       }).
       otherwise({
         redirectTo: '/index.html'
@@ -100,6 +104,7 @@ app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $locatio
   .get('/data/demo', {params: { rel: 'example_resource_list'}})
   .success(function(data){
     $scope.resources = data;
+    console.log($routeParams);
     if ($routeParams.search) {
       for(var i=0;i<$scope.resources.length;i++){
         var res = $scope.resources[i];

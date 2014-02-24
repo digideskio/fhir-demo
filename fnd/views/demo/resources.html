@@ -1,0 +1,21 @@
+<div class='row'>
+  <div class='col-sm-2' ng-include='"views/demo/menu.html"'></div>
+  <div class='col-sm-10'>
+    <div class="resources">
+      <h1 class="page-header"> Resources <a href="#/demo/resources/new.html" class="btn btn-success">Upload</a> </h1>
+      <table class="table">
+        <tr ng-repeat="item in items">
+          <td>
+            <a href="#/demo/resources/{{item.id}}.html">{{item.resourceType}}</a>
+          </td>
+          <td>
+            <a href="#/demo/resources/{{item.id}}.html">{{item.id}}</a>
+          </td>
+          <td>
+            <a ng-click="delete_resource(item)" class="btn btn-success">Delete</a>
+          </td>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<div class='row'>
+  <div class='col-sm-2' ng-include='"views/demo/menu.html"'></div>
+  <div class='col-sm-10'>
+    <div>
+      <h1 class="page-header"> Resource: {{ params.resource }}
+        <a class="btn btn-lg btn-success" href="#/demo/resources/new.html?search={{params.resource}}" role="button">Let us upload new {{ params.resource }}</a></h1>
+    </div>
+    <h2>Database structure</h2>
+    <div ng-repeat="item in items" class="alert alert-error">
+      <table class='table table-bordered'>
+        <caption class="alert-success" style='padding: 5px 0; font-weight: bold; font-size: 150%;'>{{item.table_name}}</caption>
+        <thead>
+          <tr>
+            <th ng-repeat="column in item.columns">
+              {{column.column_name}}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td ng-repeat="column in item.columns">
+            {{column.data_type}}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
