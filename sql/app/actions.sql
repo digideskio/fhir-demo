@@ -59,6 +59,19 @@ $$;
 
 SELECT actions.delete_resource(('{"uri_args": {"resource_id": "' || (select id from fhir.resource limit 1)::varchar || '"}}')::json);
 --}}}
+drop function if exists actions.update_resource(json);
+CREATE or REPLACE
+FUNCTION actions.update_resource(req json)
+RETURNS varchar
+language plv8
+as $$
+ var resource_id = req.uri_args.resource_id;
+ var data = req.request_body;
+ var sql = "select fhir.update_resource($1, $2)";
+ plv8.elog(NOTICE, sql, resource_id, data);
+ plv8.execute(sql, resource_id, data);
+ return resource_id;
+$$;
 --{{{
 select * from fhir.resource;
 select * from test.expanded_resource_tables;
