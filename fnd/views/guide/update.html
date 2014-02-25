@@ -6,23 +6,21 @@
       <li>Особенности процеса редактирования</li>
       <li>Возможность редактировать пацента вручную</li>
     </ul>
-    <form ng-controller='ResourceNewCtrl'>
+    <div ng-controller='ResourceNewCtrl'>
       <div ng-controller='ResourceUpdateCtrl'>
-        {{resource}}
-        <textarea
-          rows="10"
-          class='form-control resizable'
-          ng-model='resource'></textarea>
+        <div
+          ui-ace="{mode: 'sql'}"
+          ng-model='query'></div>
         <p class='alert alert-danger' ng-if='response.error'>{{ response.error}}</p>
         <p class='alert alert-success' ng-if='response && !response.error'>
           Your patient was successfully saved. Please, go to the next step.
         </p>
-        <button ng-click="save()" class="btn btn-success">Save</button>
+        <button ng-click="save()" class="btn btn-success">Edit</button>
         <a 
           class="btn btn-primary" 
           ng-disabled='!response || response.error'
           href="#guide/delete.html">Удаление</a>
         </div>
-    </form>
+    </div>
   </div>
 </div>

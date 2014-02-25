@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute','ngSanitize'])
+var app = angular.module('app', ['ngRoute','ngSanitize', 'ui.ace'])
 
 $(function(){
   $('.collapse').collapse()
@@ -246,12 +246,13 @@ app.factory('Patient', function($http, $q) {
   }
 })
 
-app.controller('ResourceUpdateCtrl', function($scope, Patient) {
+app.controller('ResourceUpdateCtrl', function($scope, $filter, Patient) {
   if (window.wizard) {
      Patient.get(window.wizard.patientId, function(patient) {
        $scope.resource = patient;
      })
   };
+  $scope.query = "select fhir.update_resource('" + window.wizard.patientId + "', '" + $scope.resource + "')";
 
   $scope.save = function() {
     Patient.update($scope.resource.id, JSON.stringify($scope.resource));
