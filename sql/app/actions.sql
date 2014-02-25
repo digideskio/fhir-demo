@@ -62,15 +62,16 @@ SELECT actions.delete_resource(('{"uri_args": {"resource_id": "' || (select id f
 drop function if exists actions.update_resource(json);
 CREATE or REPLACE
 FUNCTION actions.update_resource(req json)
-RETURNS varchar
-language plv8
+RETURNS json
+language plpgsql
 as $$
- var resource_id = req.uri_args.resource_id;
- var data = req.request_body;
- var sql = "select fhir.update_resource($1, $2)";
- plv8.elog(NOTICE, sql, resource_id, data);
- plv8.execute(sql, resource_id, data);
- return resource_id;
+declare
+  resource_id text;
+begin
+  resource_id := req->'uri_args'->>'resource_id';
+  PERFORM fhir.update_resource(resource_id::uuid, req->'request_body');
+  return req->'request_body';
+end;
 $$;
 --{{{
 select * from fhir.resource;

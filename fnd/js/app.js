@@ -78,7 +78,6 @@ app.controller('ResourcesCtrl', function($scope, $http){
     $scope.items = data;
   })
   $scope.delete_resource = function(item){
-    console.log(item.id);
     $http.get('/data/delete', {params: { 'resource_id': item.id}})
     .success(function(data){
       $scope.items.splice($scope.items.indexOf(item), 1);
@@ -141,7 +140,6 @@ app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $locatio
   .get('/data/demo', {params: { rel: 'example_resource_list'}})
   .success(function(data){
     $scope.resources = data;
-    console.log($routeParams);
     if ($routeParams.search) {
       for(var i=0;i<$scope.resources.length;i++){
         var res = $scope.resources[i];
@@ -159,6 +157,7 @@ app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $locatio
   })
 
   $scope.save = function(){
+    console.log($scope.resource);
     $http({
       method: 'POST',
       url: '/data/resource/create',
@@ -169,7 +168,6 @@ app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $locatio
     }).error(function(data, status, header) {
       $scope.response = {};
       $scope.response.error = "Something went wrong!";
-      console.log($scope.response);
     })
   };
 })
@@ -229,4 +227,33 @@ app.controller('menu', function($scope, $http){
   .success(function(data){
     $scope.items = data;
   })
+})
+
+app.factory('Patient', function($http, $q) {
+  return {
+    get: function(id, callback) {
+      var query = "select * from fhir.view_patient where id = '" + id + "'"
+
+      $http.get('/data/query', {params: {q: query}}).then(function(response) {
+        callback(response.data[0].json)
+      });
+    },
+    update: function(id, patient, callback) {
+      $http.put('/data/resource', patient, { params: {resource_id: id} }).then(function(response) {
+        callback(response);
+      })
+    }
+  }
+})
+
+app.controller('ResourceUpdateCtrl', function($scope, Patient) {
+  if (window.wizard) {
+     Patient.get(window.wizard.patientId, function(patient) {
+       $scope.resource = patient;
+     })
+  };
+
+  $scope.save = function() {
+    Patient.update($scope.resource.id, JSON.stringify($scope.resource));
+  }
 })

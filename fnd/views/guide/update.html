@@ -1,11 +1,28 @@
 <div class='row'>
   <div class='col-sm-2' ng-include='"views/guide/menu.html"'></div>
-  <div>
+  <div class='col-sm-10'>
     <h3>Редактирование пациента</h3>
     <ul>
       <li>Особенности процеса редактирования</li>
       <li>Возможность редактировать пацента вручную</li>
     </ul>
-    <a class="btn btn-primary" href="#guide/delete.html">Удаление</a>
+    <form ng-controller='ResourceNewCtrl'>
+      <div ng-controller='ResourceUpdateCtrl'>
+        {{resource}}
+        <textarea
+          rows="10"
+          class='form-control resizable'
+          ng-model='resource'></textarea>
+        <p class='alert alert-danger' ng-if='response.error'>{{ response.error}}</p>
+        <p class='alert alert-success' ng-if='response && !response.error'>
+          Your patient was successfully saved. Please, go to the next step.
+        </p>
+        <button ng-click="save()" class="btn btn-success">Save</button>
+        <a 
+          class="btn btn-primary" 
+          ng-disabled='!response || response.error'
+          href="#guide/delete.html">Удаление</a>
+        </div>
+    </form>
   </div>
 </div>

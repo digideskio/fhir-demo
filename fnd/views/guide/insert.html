@@ -14,7 +14,7 @@
       <textarea
         rows="10"
         class='form-control resizable'
-        ng-model='resource'>{{resource | json}}</textarea>
+        ng-model='resource'></textarea>
       <p class='alert alert-danger' ng-if='response.error'>{{ response.error}}</p>
       <p class='alert alert-success' ng-if='response && !response.error'>
         Your patient was successfully saved. Please, go to the next step.
