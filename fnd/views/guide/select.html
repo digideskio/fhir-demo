@@ -1,11 +1,27 @@
 <div class='row'>
   <div class='col-sm-2' ng-include='"views/guide/menu.html"'></div>
-  <div>
+  <div class='col-sm-10'>
     <h3>Выборка пациента</h3>
     <ul>
       <li>Особенности процеса выборки</li>
       <li>Возможность выбрать пацента вручную</li>
     </ul>
-    <a class="btn btn-primary" href="#guide/update.html">Редактирование</a>
+    <form ng-controller='QueriesCtrl'>
+      <textarea 
+        rows="10" 
+        class='form-control resizable'
+        ng-model='query'></textarea>
+      <p class='alert alert-danger' ng-if='query_items.error'>{{ query_items.error}}</p>
+      <p class='alert alert-success' ng-if='query_items.length > 0'>
+        Congratulations! Please, go to the next step.
+      </p>
+      <h4>Result</h4>
+      <pre ng-hide='query_items.error'>{{query_items | json }}</pre>
+      <button ng-click="execute_query()" class="btn btn-success">Select</button>
+      <button 
+        class="btn btn-primary" 
+        href="#guide/select.html"
+        ng-disabled='query_items.error'>Связи ресурсов</button>
+    </form>
   </div>
 </div>

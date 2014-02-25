@@ -1,17 +1,20 @@
 <div class='row'>
-  <div class="col-md-4">
-    <ul class="nav nav-pills nav-stacked">
-      <li ng-repeat="query in queries">
-      <a ng-click="set_query(query.query)">{{query.query}}</a>
-      </li>
-    </ul>
-  </div>
-  <div class='col-md-8'>
-    <textarea ng-model="query" cols="100" rows="10"></textarea>
-    <br />
-    <button class='btn btn-primary' ng-click="execute_query()">Execute Query</button>
-    <pre>{{query_items | json}}</pre>
-    <!--
+  <div class='col-sm-2' ng-include='"views/demo/menu.html"'></div>
+  <div class='col-sm-10'>
+    <div class='row'>
+      <div class="col-md-4">
+        <ul class="nav nav-pills nav-stacked">
+          <li ng-repeat="query in queries">
+          <a ng-click="set_query(query.query)">{{query.query}}</a>
+          </li>
+        </ul>
+      </div>
+      <div class='col-md-8'>
+        <textarea ng-model="query" cols="100" rows="10"></textarea>
+        <br />
+        <button class='btn btn-primary' ng-click="execute_query()">Execute Query</button>
+        <pre>{{query_items | json}}</pre>
+        <!--
   <div>
     <input ng-model='tableFilter'>
     <div ng-repeat="table in tables | filter:tableFilter">
@@ -19,5 +22,7 @@
     </div>
   </div>
 -->
+      </div>
+    </div>
   </div>
 </div>

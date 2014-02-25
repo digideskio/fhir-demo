@@ -87,16 +87,53 @@ app.controller('ResourcesCtrl', function($scope, $http){
 });
 
 app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $location, $rootScope, $timeout){
-  $scope.resourse = JSON.stringify({a:1})
-  $scope.example_search = {file: $routeParams.search}
+  $scope.resource = JSON.stringify({
+      "resourceType":"Patient",
+      "name":{
+          "use":"official",
+          "family":[
+                "Chalmers"
+              ],
+          "given":[
+                "Peter",
+                "James"
+              ]
+        },
+      "telecom":[
+          {
+            "system":"phone",
+            "value":"(03) 5555 6473",
+            "use":"work"
+          }
+        ],
+      "gender":{
+          "coding":[
+                {
+                  "system":"http://hl7.org/fhir/v3/AdministrativeGender",
+                  "code":"M",
+                  "display":"Male"
+                }
+              ]
+        },
+      "address":{
+          "use":"home",
+          "line":[
+                "534 Erewhon St"
+              ],
+          "city":"PleasantVille",
+          "state":"Vic",
+          "zip":"3999"
+        }
+    });
+  $scope.example_search = {file: $routeParams.search};
 
   $scope.load_example = function(file){
-    $scope.resourse = "Loading " + file + '...';
+    $scope.resource = "Loading " + file + '...';
     $http.get(
       '/data/demo/by_attr',
       {params: { rel: 'example_resource', col: 'file', val: file}}
     ).success(function(data){
-      $scope.resourse = JSON.stringify(data.json);
+      $scope.resource = JSON.stringify(data.json);
     })
   }
 
@@ -113,7 +150,7 @@ app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $locatio
               '/data/demo/by_attr',
               {params: { rel: 'example_resource', col: 'file', val: res.file}}
             ).success(function(data){
-              $scope.resourse = JSON.stringify(data.json);
+              $scope.resource = JSON.stringify(data.json);
             })
             break;
           }
@@ -122,19 +159,17 @@ app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $locatio
   })
 
   $scope.save = function(){
-    $scope.response = "loading..."
-    var res = JSON.parse($scope.resourse)
-
     $http({
       method: 'POST',
       url: '/data/resource/create',
-      data: JSON.stringify(res)
+      data: $scope.resource
     }).success(function(data){
       $scope.response = data
-      if (data.id) {
-        var path = "/#/resources/" + data.id + ".html";
-        document.location.href = path;
-      }
+      window.wizard = { patientId: data.id };
+    }).error(function(data, status, header) {
+      $scope.response = {};
+      $scope.response.error = "Something went wrong!";
+      console.log($scope.response);
     })
   };
 })
@@ -159,7 +194,10 @@ app.controller('QueriesCtrl', function($scope, $http){
     $scope.tables = data;
   });
 
-  $scope.query = 'select * from fhir.view_patient order by id'
+  if (window.wizard)
+    $scope.query = "select * from fhir.view_patient where id = '"  + window.wizard.patientId + "'";
+  else
+    $scope.query = "select * from fhir.view_patient order by id";
   $scope.query_items = [];
 
   $scope.execute_query = function() {
