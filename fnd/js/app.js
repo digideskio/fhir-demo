@@ -241,6 +241,19 @@ app.factory('Patient', function($http, $q) {
       $http.put('/data/resource', patient, { params: {resource_id: id} }).then(function(response) {
         if (callback) callback(response);
       })
+    },
+    remove: function(id) {
+      $http.get('/data/delete', {params: { 'resource_id': id}});
+    }
+  }
+})
+
+app.factory('Query', function($http, $q) {
+  return {
+    exec: function(query, callback) {
+      $http.get('/data/query', {params: {q: query}}).then(function(response) {
+        if (callback) callback(response)
+      });
     }
   }
 })
@@ -261,5 +274,18 @@ app.controller('ResourceUpdateCtrl', function($scope, $filter, Patient) {
     Patient.update($scope.resource.id, JSON.stringify($scope.resource), function(data) {
       $scope.response = data;
     });
+  }
+})
+
+app.controller('ResourceDeleteCtrl', function($scope, $filter, Query) {
+  $scope.del = function() {
+    if (window.wizard) Query.exec($scope.query, function(response) {
+      $scope.response = response;
+    });
+  };
+
+  if (window.wizard) {
+    $scope.query = "select fhir.delete_resource('" +
+      window.wizard.patientId + "')";
   }
 })
