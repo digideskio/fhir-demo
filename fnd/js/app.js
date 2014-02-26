@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute','ngSanitize', 'ui.ace'])
+var app = angular.module('app', ['ngRoute','ngSanitize', 'ui.ace', 'ngCookies'])
 
 $(function(){
   $('.collapse').collapse()
@@ -346,51 +346,72 @@ app.directive('step', function($parse) {
   }
 })
 
-app.factory('Wizard', function() {
-  var patientId = null;
+app.factory('Wizard', function($location, $cookies) {
   var steps = [
-    { url: "#guide/about.html", title: "Что это такое?" },
-    { url: "#guide/struct.html", title: "Структура" },
-    { url: "#guide/patient.html", title: "Пациент" },
-    { url: "#guide/insert.html", title: "Добавление" },
-    { url: "#guide/select.html", title: "Выборка" },
-    { url: "#guide/update.html", title: "Редактирование" },
-    { url: "#guide/delete.html", title: "Удаление" },
+    { url: "/guide/about.html", title: "Что это такое?" },
+    { url: "/guide/struct.html", title: "Структура" },
+    { url: "/guide/patient.html", title: "Пациент" },
+    { url: "/guide/insert.html", title: "Добавление" },
+    { url: "/guide/select.html", title: "Выборка" },
+    { url: "/guide/update.html", title: "Редактирование" },
+    { url: "/guide/delete.html", title: "Удаление" },
     { url: "#demo/before.html", title: "Полное демо" }
   ];
-  var currentStepIndex = 0;
+  var currentIndexOf = function(url) {
+    for (var i = 0; i < steps.length; i++) {
+      if (steps[i].url == url) return i;
+    }
+    return -1;
+  };
+  var lastStep = function() {
+    return $cookies.lastStep || steps[0].url;
+  }
+  var nextStep = function() {
+    return steps[currentIndexOf($location.path()) + 1];
+  }
   return {
     setPatientId: function(id) {
-      patientId = id;
+      $cookies.patientId = id;
     },
     getPatientId: function() {
-      return patientId;
+      return $cookies.patientId;
     },
     steps: function() {
       return steps;
     },
-    currentStepIndex: function() {
-      return currentStepIndex;
+    finishedSteps: function() {
+      return steps.slice(0, currentIndexOf(lastStep()) + 1);
     },
-    goToNextStep: function() {
-      currentStepIndex++;
+    notFinishedSteps: function() {
+      return steps.slice(currentIndexOf(lastStep()) + 1);
+    },
+    nextStep: nextStep,
+    saveProgress: function() {
+      if (currentIndexOf($location.path()) >= currentIndexOf(lastStep()))
+        $cookies.lastStep = nextStep().url;
+    },
+    isActive: function(step) {
+      return $location.path() == step.url;
     }
   }
 })
 
 app.controller('GuideMenuController', function($scope, Wizard) {
-  $scope.steps = Wizard.steps();
-  $scope.currentStepIndex = Wizard.currentStepIndex();
+  $scope.finishedSteps = Wizard.finishedSteps();
+  $scope.notFinishedSteps = Wizard.notFinishedSteps();
+  $scope.isActive = function(step) {
+    return Wizard.isActive(step);
+  }
 })
 
 app.directive('goToNextStep', function(Wizard) {
   return {
-    transclude: true,
     replace: true,
-    template: "<a class='btn btn-primary' ng-click='goToNextStep()' ng-transclude></a>",
+    template: "<a class='btn btn-primary' ng-click='saveProgress()' href=#{{nextStep.url}}>{{nextStep.title}}</a>",
     link: function(scope, element, attr) {
-      scope.goToNextStep = function() {
-        Wizard.goToNextStep();
+      scope.nextStep = Wizard.nextStep();
+      scope.saveProgress = function() {
+        Wizard.saveProgress();
       }
     }
   }

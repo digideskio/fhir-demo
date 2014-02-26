@@ -11,8 +11,7 @@
     <pre>{{response | compact | json }}</pre>
   </div>
   <button ng-click="execute()" class="btn btn-success">Execute</button>
-  <a href="{{nextStepUrl}}"
-     ng-disabled='!isValid()'
+  <a ng-disabled='!isValid()'
      go-to-next-step>{{nextStepName}}</a>
 </form>
 

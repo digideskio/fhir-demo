@@ -19,6 +19,7 @@
     "angular-route": "latest",
     "angular-resource": "latest",
     "angular-sanitize": "latest",
+    "angular-cookies": "latest",
     "angular-ui-ace": "latest"
   }
 }

@@ -1,6 +1,8 @@
 <ul class="nav nav-stacked nav-pills" ng-controller='GuideMenuController'>
-  <li ng-repeat='step in steps'>
-    <a ng-if='!$last && $index > currentStepIndex' class='step-disabled'>{{step.title}}</a>
-    <a ng-if='!$last && $index <= currentStepIndex' href='{{step.url}}'>{{step.title}}</a>
+  <li ng-repeat='step in finishedSteps' ng-class="{'active': isActive(step)}">
+    <a href='#{{step.url}}'>{{step.title}}</a>
+  </li>
+  <li ng-repeat='step in notFinishedSteps'>
+    <a ng-if='!$last' class='step-disabled'>{{step.title}}</a>
   </li>
 </ul>
