@@ -6,22 +6,21 @@
       <li>Особенности процеса выборки</li>
       <li>Возможность выбрать пацента вручную</li>
     </ul>
-    <form ng-controller='QueriesCtrl'>
-      <textarea 
-        rows="10" 
-        class='form-control resizable'
-        ng-model='query'></textarea>
-      <p class='alert alert-danger' ng-if='query_items.error'>{{ query_items.error}}</p>
-      <p class='alert alert-success' ng-if='query_items.length > 0'>
+    <form ng-controller='ResourceSelectCtrl'>
+      <div
+        ui-ace="{mode: 'sql', useWrapMode: true}"
+        ng-model='query'></div>
+      <p class='alert alert-danger' ng-if='response.error'>{{ response.error}}</p>
+      <p class='alert alert-success' ng-if='response.length > 0'>
         Congratulations! Please, go to the next step.
       </p>
       <h4>Result</h4>
-      <pre ng-hide='query_items.error'>{{query_items | json }}</pre>
-      <button ng-click="execute_query()" class="btn btn-success">Select</button>
+      <pre ng-hide='response.error'>{{response | json }}</pre>
+      <button ng-click="select()" class="btn btn-success">Select</button>
       <a 
         class="btn btn-primary" 
         href="#guide/update.html"
-        ng-disabled='query_items.length == 0 || query_items.error'>Редактирование</a>
+        ng-disabled='!response || response.length == 0 || response.error'>Редактирование</a>
     </form>
   </div>
 </div>

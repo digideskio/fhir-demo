@@ -251,6 +251,7 @@ app.factory('Patient', function($http, $q) {
 app.factory('Query', function($http, $q) {
   return {
     exec: function(query, callback) {
+      query = query.replace(/;$/, '');
       $http.get('/data/query', {params: {q: query}}).then(function(response) {
         if (callback) callback(response)
       });
@@ -258,7 +259,7 @@ app.factory('Query', function($http, $q) {
   }
 })
 
-app.controller('ResourceUpdateCtrl', function($scope, $filter, Patient) {
+app.controller('ResourceUpdateCtrl', function($scope, $filter, Query, Patient) {
   if (window.wizard) {
      Patient.get(window.wizard.patientId, function(patient) {
        $scope.resource = patient;
@@ -271,8 +272,8 @@ app.controller('ResourceUpdateCtrl', function($scope, $filter, Patient) {
   };
 
   $scope.save = function() {
-    Patient.update($scope.resource.id, JSON.stringify($scope.resource), function(data) {
-      $scope.response = data;
+    if (window.wizard) Query.exec($scope.query, function(response) {
+      $scope.response = response.data;
     });
   }
 })
@@ -280,7 +281,7 @@ app.controller('ResourceUpdateCtrl', function($scope, $filter, Patient) {
 app.controller('ResourceDeleteCtrl', function($scope, $filter, Query) {
   $scope.del = function() {
     if (window.wizard) Query.exec($scope.query, function(response) {
-      $scope.response = response;
+      $scope.response = response.data;
     });
   };
 
@@ -310,8 +311,21 @@ app.controller('ResourceInsertCtrl', function($scope, $filter, Query) {
 
   $scope.save = function() {
     Query.exec($scope.query, function(response) {
-      $scope.response = response;
+      $scope.response = response.data;
       window.wizard = { patientId: response.data[0].insert_resource }
     })
+  }
+})
+
+app.controller('ResourceSelectCtrl', function($scope, $filter, Query) {
+  $scope.select = function() {
+    if (window.wizard) Query.exec($scope.query, function(response) {
+      $scope.response = response.data;
+    });
+  };
+
+  if (window.wizard) {
+    $scope.query = "select * from fhir.view_patient where id = '" +
+      window.wizard.patientId + "'";
   }
 })
