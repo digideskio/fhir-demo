@@ -15,7 +15,7 @@
         Congratulations! Please, go to the next step.
       </p>
       <h4>Result</h4>
-      <pre ng-hide='response.error'>{{response | json }}</pre>
+      <pre ng-hide='response.error'>{{response | compact | json }}</pre>
       <button ng-click="select()" class="btn btn-success">Select</button>
       <a 
         class="btn btn-primary" 
