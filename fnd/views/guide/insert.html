@@ -1,4 +1,4 @@
-<div class='row'>
+<div class='row' ng-controller='ResourceInsertCtrl'>
   <div class='col-sm-2' ng-include='"views/guide/menu.html"'></div>
   <div class='col-sm-10'>
     <h3>Добавление</h3>
@@ -10,7 +10,7 @@
       Попробуем создать пациента. Для этого необходимо його представление в 
       json и отправить на сервер. (Нужно добавить выполнение sql запросов.)
     </p>
-    <form ng-controller='ResourceInsertCtrl'>
+    <form>
       <div
         ui-ace="{mode: 'sql', useWrapMode: true}"
         ng-model='query'></div>

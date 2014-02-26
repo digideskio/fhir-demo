@@ -1,4 +1,4 @@
-<div class='row'>
+<div class='row' ng-controller='ResourceSelectCtrl'>
   <div class='col-sm-2' ng-include='"views/guide/menu.html"'></div>
   <div class='col-sm-10'>
     <h3>Выборка пациента</h3>
@@ -6,7 +6,7 @@
       <li>Особенности процеса выборки</li>
       <li>Возможность выбрать пацента вручную</li>
     </ul>
-    <form ng-controller='ResourceSelectCtrl'>
+    <form>
       <div
         ui-ace="{mode: 'sql', useWrapMode: true}"
         ng-model='query'></div>

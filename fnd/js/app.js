@@ -163,7 +163,6 @@ app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $locatio
       data: $scope.resource
     }).success(function(data){
       $scope.response = data
-      window.wizard = { patientId: data.id };
     }).error(function(data, status, header) {
       $scope.response = {};
       $scope.response.error = "Something went wrong!";
@@ -191,10 +190,7 @@ app.controller('QueriesCtrl', function($scope, $http){
     $scope.tables = data;
   });
 
-  if (window.wizard)
-    $scope.query = "select * from fhir.view_patient where id = '"  + window.wizard.patientId + "'";
-  else
-    $scope.query = "select * from fhir.view_patient order by id";
+  $scope.query = "select * from fhir.view_patient order by id";
   $scope.query_items = [];
 
   $scope.execute_query = function() {
@@ -259,39 +255,35 @@ app.factory('Query', function($http, $q) {
   }
 })
 
-app.controller('ResourceUpdateCtrl', function($scope, $filter, Query, Patient) {
-  if (window.wizard) {
-     Patient.get(window.wizard.patientId, function(patient) {
-       $scope.resource = patient;
-       $scope.query = "select fhir.update_resource('" +
-         window.wizard.patientId +
-         "', '" +
-         JSON.stringify($scope.resource) +
-         "')";
-     })
-  };
+app.controller('ResourceUpdateCtrl', function($scope, $filter, Query, Patient, Wizard) {
+  Patient.get(Wizard.getPatientId(), function(patient) {
+    $scope.resource = patient;
+    $scope.query = "select fhir.update_resource('" +
+      Wizard.getPatientId() +
+      "', '" +
+      JSON.stringify($scope.resource) +
+      "')";
+  })
 
   $scope.save = function() {
-    if (window.wizard) Query.exec($scope.query, function(response) {
+    Query.exec($scope.query, function(response) {
       $scope.response = response.data;
     });
   }
 })
 
-app.controller('ResourceDeleteCtrl', function($scope, $filter, Query) {
+app.controller('ResourceDeleteCtrl', function($scope, $filter, Query, Wizard) {
   $scope.del = function() {
-    if (window.wizard) Query.exec($scope.query, function(response) {
+    Query.exec($scope.query, function(response) {
       $scope.response = response.data;
     });
   };
 
-  if (window.wizard) {
-    $scope.query = "select fhir.delete_resource('" +
-      window.wizard.patientId + "')";
-  }
+  $scope.query = "select fhir.delete_resource('" +
+    Wizard.getPatientId() + "')";
 })
 
-app.controller('ResourceInsertCtrl', function($scope, $filter, Query) {
+app.controller('ResourceInsertCtrl', function($scope, $filter, Query, Wizard) {
   $scope.resource = {
       "resourceType":"Patient",
       "name":{
@@ -312,22 +304,20 @@ app.controller('ResourceInsertCtrl', function($scope, $filter, Query) {
   $scope.save = function() {
     Query.exec($scope.query, function(response) {
       $scope.response = response.data;
-      window.wizard = { patientId: response.data[0].insert_resource }
+      Wizard.setPatientId(response.data[0].insert_resource);
     })
   }
 })
 
-app.controller('ResourceSelectCtrl', function($scope, $filter, Query) {
+app.controller('ResourceSelectCtrl', function($scope, $filter, Query, Wizard) {
   $scope.select = function() {
-    if (window.wizard) Query.exec($scope.query, function(response) {
+    Query.exec($scope.query, function(response) {
       $scope.response = response.data;
     });
   };
 
-  if (window.wizard) {
-    $scope.query = "select * from fhir.view_patient where id = '" +
-      window.wizard.patientId + "'";
-  }
+  $scope.query = "select * from fhir.view_patient where id = '" +
+    Wizard.getPatientId() + "'";
 })
 
 app.filter('compact', function() {
@@ -348,5 +338,23 @@ app.filter('compact', function() {
       }
     }
     return obj;
+  }
+})
+
+app.directive('step', function() {
+  return {
+
+  }
+})
+
+app.factory('Wizard', function() {
+  this.patientId = null;
+  return {
+    setPatientId: function(id) {
+      patientId = id;
+    },
+    getPatientId: function() {
+      return patientId;
+    }
   }
 })
