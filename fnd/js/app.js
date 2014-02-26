@@ -416,3 +416,32 @@ app.directive('goToNextStep', function(Wizard) {
     }
   }
 })
+
+app.filter('highlight', function() {
+  return function(text, lang) {
+    if (lang)
+      return hljs.highlight(lang, text).value;
+    else
+      return hljs.highlightAuto(text).value;
+  }
+})
+
+app.directive('highlight', function($filter, $parse) {
+  return {
+    compile: function(tElement, tAttr) {
+      var lang = tAttr.highlight;
+
+      return function(scope, element, attr) {
+        highlightFilter = $filter('highlight');
+
+        var htmlDecode = function(input) {
+          var e = document.createElement('div');
+          e.innerHTML = input;
+          return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+        }
+        var highlighted = highlightFilter(htmlDecode(content), lang);
+        element.html(highlighted, lang)
+      }
+    }
+  }
+});
