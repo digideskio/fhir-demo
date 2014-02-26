@@ -10,11 +10,10 @@
       Попробуем создать пациента. Для этого необходимо його представление в 
       json и отправить на сервер. (Нужно добавить выполнение sql запросов.)
     </p>
-    <form ng-controller='ResourceNewCtrl'>
-      <textarea
-        rows="10"
-        class='form-control resizable'
-        ng-model='resource'></textarea>
+    <form ng-controller='ResourceInsertCtrl'>
+      <div
+        ui-ace="{mode: 'sql', useWrapMode: true}"
+        ng-model='query'></div>
       <p class='alert alert-danger' ng-if='response.error'>{{ response.error}}</p>
       <p class='alert alert-success' ng-if='response && !response.error'>
         Your patient was successfully saved. Please, go to the next step.

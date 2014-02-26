@@ -289,3 +289,29 @@ app.controller('ResourceDeleteCtrl', function($scope, $filter, Query) {
       window.wizard.patientId + "')";
   }
 })
+
+app.controller('ResourceInsertCtrl', function($scope, $filter, Query) {
+  $scope.resource = {
+      "resourceType":"Patient",
+      "name":{
+          "use":"official",
+          "family":[
+                "Chalmers"
+              ],
+          "given":[
+                "Peter",
+                "James"
+              ]
+        }
+  };
+
+  $scope.query = "select fhir.insert_resource('" +
+    JSON.stringify($scope.resource) + "')";
+
+  $scope.save = function() {
+    Query.exec($scope.query, function(response) {
+      $scope.response = response;
+      window.wizard = { patientId: response.data[0].insert_resource }
+    })
+  }
+})
