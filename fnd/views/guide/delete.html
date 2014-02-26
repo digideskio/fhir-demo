@@ -1,4 +1,4 @@
-<div class='row'>
+<div class='row' ng-controller='ResourceDeleteCtrl'>
   <div class='col-sm-2' ng-include='"views/guide/menu.html"'></div>
   <div class='col-sm-10'>
     <h3>Удаление пациента</h3>
@@ -6,19 +6,6 @@
       <li>Особенности процеса удаления</li>
       <li>Возможность удаления пацента вручную</li>
     </ul>
-    <div ng-controller='ResourceDeleteCtrl'>
-      <div
-        ui-ace="{mode: 'sql', useWrapMode: true}"
-        ng-model='query'></div>
-      <p class='alert alert-danger' ng-if='response.error'>{{ response.error}}</p>
-      <p class='alert alert-success' ng-if='response && !response.error'>
-      Your patient was successfully saved. Please, go to the next step.
-      </p>
-      <button ng-click="del()" class="btn btn-success">Edit</button>
-      <a 
-        class="btn btn-primary" 
-        ng-disabled='!response || response.error'
-        href="#guide/full-demo.html">Перейти к полному демо</a>
-    </div>
+    <step query='{{query}}' next-step-url='#demo/before.html' next-step-name='Перейти к полному демо'></step>
   </div>
 </div>

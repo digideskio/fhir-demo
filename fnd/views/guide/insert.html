@@ -8,21 +8,8 @@
     </ul>
     <p>
       Попробуем создать пациента. Для этого необходимо його представление в 
-      json и отправить на сервер. (Нужно добавить выполнение sql запросов.)
+      json и отправить на сервер.
     </p>
-    <form>
-      <div
-        ui-ace="{mode: 'sql', useWrapMode: true}"
-        ng-model='query'></div>
-      <p class='alert alert-danger' ng-if='response.error'>{{ response.error}}</p>
-      <p class='alert alert-success' ng-if='response && !response.error'>
-        Your patient was successfully saved. Please, go to the next step.
-      </p>
-      <button ng-click="save()" class="btn btn-success">Save</button>
-      <a 
-        class="btn btn-primary" 
-        href="#guide/select.html"
-        ng-disabled='!response || response.error'>Выбрать пациента</a>
-    </form>
+    <step first='true' query='{{query}}' next-step-url='#guide/select.html' next-step-name='Выбрать пациента'></step>
   </div>
 </div>
