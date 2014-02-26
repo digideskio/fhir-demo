@@ -249,11 +249,17 @@ app.controller('ResourceUpdateCtrl', function($scope, $filter, Patient) {
   if (window.wizard) {
      Patient.get(window.wizard.patientId, function(patient) {
        $scope.resource = patient;
+       $scope.query = "select fhir.update_resource('" +
+         window.wizard.patientId +
+         "', '" +
+         JSON.stringify($scope.resource) +
+         "')";
      })
   };
-  $scope.query = "select fhir.update_resource('" + window.wizard.patientId + "', '" + $scope.resource + "')";
 
   $scope.save = function() {
-    Patient.update($scope.resource.id, JSON.stringify($scope.resource));
+    Patient.update($scope.resource.id, JSON.stringify($scope.resource), function(data) {
+      $scope.response = data;
+    });
   }
 })
