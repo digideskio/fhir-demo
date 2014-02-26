@@ -3,15 +3,16 @@
     ui-ace="{mode: 'sql', useWrapMode: true}"
     ng-model='query'></div>
   <p class='alert alert-danger' ng-if='response.error'>{{ response.error}}</p>
-  <p class='alert alert-success' ng-if='response.length > 0'>
+  <p class='alert alert-success' ng-if='isValid()'>
     Congratulations! Please, go to the next step.
   </p>
-  <h4>Result</h4>
-  <pre ng-show='showResult && !response.error'>{{response | compact | json }}</pre>
+  <div ng-show='showResult && !response.error'>
+    <h4>Result</h4>
+    <pre>{{response | compact | json }}</pre>
+  </div>
   <button ng-click="execute()" class="btn btn-success">Execute</button>
-  <a 
-    class="btn btn-primary" 
-    ng-href="{{nextStepUrl}}"
-    ng-disabled='!response || response.length == 0 || response.error'>{{nextStepName}}</a>
+  <a href="{{nextStepUrl}}"
+     ng-disabled='!isValid()'
+     go-to-next-step>{{nextStepName}}</a>
 </form>
 

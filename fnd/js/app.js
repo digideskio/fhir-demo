@@ -325,10 +325,15 @@ app.directive('step', function($parse) {
       showResult: '='
     },
     controller: function($scope, $attrs, Query, Wizard) {
+      $scope.isValid = function() {
+        return $scope.response && $scope.response.length > 0 && !$scope.response.error;
+      }
+
       $scope.execute = function() {
         Query.exec($scope.query, function(response) {
           $scope.response = response.data;
-          if ($parse($attrs.first)()) {
+          var isFirst = $parse($attrs.first)();
+          if (isFirst) {
             Wizard.setPatientId(response.data[0].insert_resource);
           }
         });
@@ -343,12 +348,50 @@ app.directive('step', function($parse) {
 
 app.factory('Wizard', function() {
   var patientId = null;
+  var steps = [
+    { url: "#guide/about.html", title: "Что это такое?" },
+    { url: "#guide/struct.html", title: "Структура" },
+    { url: "#guide/patient.html", title: "Пациент" },
+    { url: "#guide/insert.html", title: "Добавление" },
+    { url: "#guide/select.html", title: "Выборка" },
+    { url: "#guide/update.html", title: "Редактирование" },
+    { url: "#guide/delete.html", title: "Удаление" },
+    { url: "#demo/before.html", title: "Полное демо" }
+  ];
+  var currentStepIndex = 0;
   return {
     setPatientId: function(id) {
       patientId = id;
     },
     getPatientId: function() {
       return patientId;
+    },
+    steps: function() {
+      return steps;
+    },
+    currentStepIndex: function() {
+      return currentStepIndex;
+    },
+    goToNextStep: function() {
+      currentStepIndex++;
+    }
+  }
+})
+
+app.controller('GuideMenuController', function($scope, Wizard) {
+  $scope.steps = Wizard.steps();
+  $scope.currentStepIndex = Wizard.currentStepIndex();
+})
+
+app.directive('goToNextStep', function(Wizard) {
+  return {
+    transclude: true,
+    replace: true,
+    template: "<a class='btn btn-primary' ng-click='goToNextStep()' ng-transclude></a>",
+    link: function(scope, element, attr) {
+      scope.goToNextStep = function() {
+        Wizard.goToNextStep();
+      }
     }
   }
 })
