@@ -9,7 +9,7 @@
     <div ng-controller='ResourceNewCtrl'>
       <div ng-controller='ResourceUpdateCtrl'>
         <div
-          ui-ace="{mode: 'sql'}"
+          ui-ace="{mode: 'sql', useWrapMode: true}"
           ng-model='query'></div>
         <p class='alert alert-danger' ng-if='response.error'>{{ response.error}}</p>
         <p class='alert alert-success' ng-if='response && !response.error'>

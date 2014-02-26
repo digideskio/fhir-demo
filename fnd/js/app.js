@@ -157,7 +157,6 @@ app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $locatio
   })
 
   $scope.save = function(){
-    console.log($scope.resource);
     $http({
       method: 'POST',
       url: '/data/resource/create',
@@ -235,12 +234,12 @@ app.factory('Patient', function($http, $q) {
       var query = "select * from fhir.view_patient where id = '" + id + "'"
 
       $http.get('/data/query', {params: {q: query}}).then(function(response) {
-        callback(response.data[0].json)
+        if (callback) callback(response.data[0].json)
       });
     },
     update: function(id, patient, callback) {
       $http.put('/data/resource', patient, { params: {resource_id: id} }).then(function(response) {
-        callback(response);
+        if (callback) callback(response);
       })
     }
   }
