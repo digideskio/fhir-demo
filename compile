@@ -19,6 +19,6 @@ do
 done
 psql  -p $PGPORT -d $PGDATABASE -c "TRUNCATE TABLE demo.example_resource"
 cat /tmp/tmp.sql | psql  -p $PGPORT -d $PGDATABASE
-psql  -p $PGPORT -d $PGDATABASE -c "UPDATE demo.example_resource SET file = replace(file, '../../data/', '');"
+psql  -p $PGPORT -d $PGDATABASE -c "UPDATE demo.example_resource SET file = regexp_replace(file, E'.*/', '');"
 psql  -p $PGPORT -d $PGDATABASE -c "select count(*) from demo.example_resource"
 
