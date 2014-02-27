@@ -19,13 +19,13 @@ app.config(['$routeProvider','$locationProvider',
         templateUrl: 'views/demo/resources.html',
         controller: 'ResourcesCtrl'
       }).
+      when('/demo/resources/:type/:id.html', {
+        templateUrl: 'views/demo/resources.html',
+        controller: 'ResourcesCtrl'
+      }).
       when('/demo/resources/new.html', {
         templateUrl: 'views/demo/resource_new.html',
         controller: 'ResourceNewCtrl'
-      }).
-      when('/demo/resources/:id.html', {
-        templateUrl: 'views/demo/resource_show.html',
-        controller: 'ResourceShowCtrl'
       }).
       when('/demo/queries.html', {
         templateUrl: 'views/demo/queries.html',
@@ -64,11 +64,11 @@ app.controller('BaseCtrl', function($scope, $http, $routeParams){
   }
 });
 
-app.controller('ResourcesCtrl', function($scope, $http, $filter){
+app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $location){
   $http.get('/data/resource', {params: {type: 'patient'}})
   .success(function(data){
     $scope.items = data;
-    $scope.show($scope.items[0]);
+    $scope.show($routeParams.id || $scope.items[0].id);
   })
   $scope.delete_resource = function(item){
     $http.get('/data/delete', {params: { 'resource_id': item.id}})
@@ -76,10 +76,10 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter){
       $scope.items.splice($scope.items.indexOf(item), 1);
     })
   }
-  $scope.show = function(item) {
-    $http.get('/data/details', {params: { resource_id: item.id }})
+  $scope.show = function(itemId) {
+    $http.get('/data/details', {params: { resource_id: itemId }})
     .success(function(data){
-      $scope.resource = item;
+      $scope.resourceType = $routeParams.type;
       $scope.details = data.data;
     })
   }
@@ -105,10 +105,7 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter){
       data: $scope.snippet.jsonString
     }).success(function(data){
       $scope.response = data
-      newItem = $scope.snippet.json;
-      newItem.id = data.id;
-      console.log(newItem)
-      $scope.items.push(newItem);
+      $location.path('demo/resources/' + $scope.snippet.json.resourceType + '/' + data.id + '.html');
     }).error(function(data, status, header) {
       $scope.response = {};
       $scope.response.error = "Something went wrong!";
