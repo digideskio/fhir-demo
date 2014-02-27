@@ -95,11 +95,26 @@ as $$
 				var columns = resource_tables[i]['columns'];
 				var where = 'id'
 				for (var j=0; j< columns.length; j++) {
-								if (columns[j]['column_name'] == 'resource_id') {
+							if (columns[j]['column_name'] == 'resource_id') {
 												where = 'resource_id';
 												}
 								}
 				var sel = plv8.execute("SELECT * from fhir." + table_name + " where " + where + " = '" + resource_id + "'");
+        for(var m=0;m<sel.length;m++){
+            var row = sel[m];
+            for (var jj=0; jj< columns.length; jj++) {
+              var col_name = columns[jj]['column_name'];
+              if (row[col_name]) {
+                var data_type = columns[jj]['data_type'];
+                if (data_type == 'uuid') {
+                  row[col_name] = row[col_name].split('-')[0] + '...';
+                } else if (data_type == 'date' || data_type == 'timestamp without time zone') {
+                
+                  row[col_name] = new Date(Date.parse(row[col_name])).toString();
+                }
+            }
+          }
+        }
 				if (sel.length > 0) {
 								var headers = [];
 								for(var k in sel[0]) {
