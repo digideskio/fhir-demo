@@ -1,6 +1,25 @@
 drop schema if exists test cascade;
 create schema test;
 
+CREATE OR REPLACE VIEW
+test.columns AS (
+  SELECT
+    c.table_name,
+    c.column_name,
+    c.ordinal_position,
+    CASE
+      WHEN c.data_type = 'ARRAY' THEN e.data_type || '[]'
+      WHEN c.data_type = 'USER-DEFINED' THEN c.udt_name
+      ELSE c.data_type
+    END AS data_type
+  FROM information_schema.columns c
+    LEFT JOIN information_schema.element_types e
+      ON c.dtd_identifier = e.collection_type_identifier and
+         c.table_schema = e.object_schema AND
+         c.table_name = e.object_name
+  WHERE c.table_schema = 'fhir'
+);
+
 CREATE
 VIEW test.resource_tables as (
   SELECT
@@ -36,9 +55,9 @@ create view test.expanded_resource_tables as
   select
     rt.resource_name,
     rt.table_name,
-    array_to_json(array_agg((i.column_name, i.data_type)::test.column_desc order by i.ordinal_position)) as columns
+    array_to_json(array_agg((c.column_name, c.data_type)::test.column_desc order by c.ordinal_position)) as columns
   from test.resource_tables rt
-  join information_schema.columns i on i.table_name = rt.table_name and i.table_schema = 'fhir'
+  join test.columns c on c.table_name = rt.table_name
   group by rt.resource_name, rt.table_name;
 
 create view test.resource_description as
