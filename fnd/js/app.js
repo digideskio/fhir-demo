@@ -8,20 +8,9 @@ app.config(['$routeProvider','$locationProvider',
   function($routeProvider, $locationProvider) {
     // $locationProvider.html5Mode(true);
     $routeProvider.
-      when('/index.html', {
-        templateUrl: 'views/index.html',
-        controller: 'IndexCtrl'
-      }).
-      when('/demo/before.html', {
-        templateUrl: 'views/demo/before.html'
-      }).
-      when('/demo/resources_meta.html', {
-        templateUrl: 'views/demo/resources_meta.html',
+      when('/demo/schema.html', {
+        templateUrl: 'views/demo/schema.html',
         controller: 'BaseCtrl'
-      }).
-      when('/demo/resources_meta/:resource.html', {
-        templateUrl: 'views/demo/resource_meta_show.html',
-        controller: 'BaseShowCtrl'
       }).
       when('/demo/resources.html', {
         templateUrl: 'views/demo/resources.html',
@@ -60,22 +49,23 @@ app.controller('BaseCtrl', function($scope, $http){
  $http.get('/data/view', {params: { view: 'resource'}})
   .success(function(data){
     $scope.items = data;
+    $scope.show($scope.items[0])
   })
+
+  $scope.show = function(item){
+    $scope.resource = item
+    $http.get('/data/show', {params: { resource: item.title}})
+    .success(function(data){
+      $scope.details = data;
+    })
+  }
 });
 
-app.controller('BaseShowCtrl',
-    function($scope, $http, $routeParams){
-  $scope.params = $routeParams
-  $http.get('/data/show', {params: { resource: $routeParams.resource}})
-  .success(function(data){
-    $scope.items = data;
-  })
-});
-
-app.controller('ResourcesCtrl', function($scope, $http){
+app.controller('ResourcesCtrl', function($scope, $http, $filter){
   $http.get('/data/resource', {params: {type: 'patient'}})
   .success(function(data){
     $scope.items = data;
+    $scope.show($scope.items[0]);
   })
   $scope.delete_resource = function(item){
     $http.get('/data/delete', {params: { 'resource_id': item.id}})
@@ -83,6 +73,41 @@ app.controller('ResourcesCtrl', function($scope, $http){
       $scope.items.splice($scope.items.indexOf(item), 1);
     })
   }
+  $scope.show = function(item) {
+    $scope.resource = item;
+    $http.get('/data/details', {params: { resource_id: item.id }})
+    .success(function(data){
+      $scope.details = data.data;
+    })
+  }
+   $http.get('/data/demo', {params: { rel: 'example_resource_list'}})
+    .success(function(data){
+      $scope.snippets = data;
+    })
+  $scope.loadExample = function(file){
+    $scope.resource = "Loading " + file + '...';
+    $http.get(
+      '/data/demo/by_attr',
+      {params: { rel: 'example_resource', col: 'file', val: file}}
+    ).success(function(data){
+      $scope.snippet = $filter('json')(data.json);
+    })
+  }
+  $scope.save = function(){
+    $http({
+      method: 'POST',
+      url: '/data/resource/create',
+      data: $scope.snippet
+    }).success(function(data){
+      $scope.response = data
+      var newItem = JSON.parse($scope.snippet);
+      newItem.id = data.id;
+      $scope.items.push(newItem);
+    }).error(function(data, status, header) {
+      $scope.response = {};
+      $scope.response.error = "Something went wrong!";
+    })
+  };
 });
 
 app.controller('ResourceNewCtrl', function($scope, $http, $routeParams, $location, $rootScope, $timeout){
@@ -190,11 +215,11 @@ app.controller('QueriesCtrl', function($scope, $http){
     $scope.tables = data;
   });
 
-  $scope.query = "select * from fhir.view_patient order by id";
+  $scope.query = { query: "select * from fhir.view_patient order by id" };
   $scope.query_items = [];
 
-  $scope.execute_query = function() {
-    $http.get('/data/query', {params: {q: $scope.query}})
+  $scope.executeQuery = function() {
+    $http.get('/data/query', {params: {q: $scope.query.query}})
     .success(function(data){
       $scope.query_items = data;
     })
@@ -203,9 +228,10 @@ app.controller('QueriesCtrl', function($scope, $http){
   $http.get('/data/demo', {params: { rel: 'queries'}})
   .success(function(data){
     $scope.queries = data;
+    $scope.query = data[0];
   })
 
-  $scope.set_query = function(query) {
+  $scope.show = function(query) {
     $scope.query = query;
   }
 })

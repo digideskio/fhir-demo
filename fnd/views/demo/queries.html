@@ -1,28 +1,51 @@
-<div class='row'>
-  <div class='col-sm-2' ng-include='"views/demo/menu.html"'></div>
-  <div class='col-sm-10'>
-    <div class='row'>
-      <div class="col-md-4">
-        <ul class="nav nav-pills nav-stacked">
-          <li ng-repeat="query in queries">
-          <a ng-click="set_query(query.query)">{{query.query}}</a>
-          </li>
-        </ul>
+<!--
+  <div class='row'>
+    <div class='col-sm-2' ng-include='"views/demo/menu.html"'></div>
+    <div class='col-sm-10'>
+      <div class='row'>
+        <div class="col-md-4">
+          <ul class="nav nav-pills nav-stacked">
+            <li ng-repeat="query in queries">
+            <a ng-click="set_query(query.query)">{{query.query}}</a>
+            </li>
+          </ul>
+        </div>
+        <div class='col-md-8'>
+          <textarea ng-model="query" cols="100" rows="10"></textarea>
+          <br />
+          <button class='btn btn-primary' ng-click="execute_query()">Execute Query</button>
+          <pre>{{query_items | json}}</pre>
+        </div>
       </div>
-      <div class='col-md-8'>
-        <textarea ng-model="query" cols="100" rows="10"></textarea>
-        <br />
-        <button class='btn btn-primary' ng-click="execute_query()">Execute Query</button>
-        <pre>{{query_items | json}}</pre>
-        <!--
-  <div>
-    <input ng-model='tableFilter'>
-    <div ng-repeat="table in tables | filter:tableFilter">
-      {{ table.table_name }}
     </div>
   </div>
 -->
-      </div>
+<div class='row'>
+  <div class='col-sm-3'>
+    <h2 class="page-header">
+      <input class="form-control" ng-model="search.name" placeholder="search"/>
+    </h2>
+  </div>
+  <div class='col-sm-9'>
+    <h2 class="page-header"> 
+      <button class='btn btn-primary' ng-click="executeQuery()">Execute</button>
+      {{ query.name }} 
+    </h2>
+  </div>
+</div>
+<div class='row'>
+  <div class='col-sm-3'>
+    <div ng-repeat="query in queries | filter:search">
+      <a href="javascript:void(0)" 
+        ng-click="show(query)"
+        role="button">{{query.name}}</a>
+    </div>
+  </div>
+  <div class='col-sm-9'>
+    <div ui-ace="{mode: 'sql', useWrapMode: true}" ng-model='query.query'></div>
+    <div ng-show='query_items.length != 0'>
+      <h4>Result</h4>
+      <pre>{{query_items | compact | json}}</pre>
     </div>
   </div>
 </div>
