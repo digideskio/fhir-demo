@@ -68,18 +68,29 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
   $http.get('/data/resource', {params: {type: 'patient'}})
   .success(function(data){
     $scope.items = data;
-    $scope.show($routeParams.id || $scope.items[0].id);
+    var item;
+    if ($routeParams.id)
+      item = {
+        id: $routeParams.id,
+        resourceType: $routeParams.type
+      }
+    else
+      item = $scope.items[0]
+    $scope.show(item);
   })
-  $scope.delete_resource = function(item){
-    $http.get('/data/delete', {params: { 'resource_id': item.id}})
+  $scope.deleteResource = function(){
+    $http.get('/data/delete', {params: { 'resource_id': $routeParams.id}})
     .success(function(data){
-      $scope.items.splice($scope.items.indexOf(item), 1);
+      var index = $scope.items.map(function(item) { item.id }).indexOf($routeParams.id);
+      $scope.items.splice(index, 1);
+      $location.path('/demo/resources.html');
+      console.log($location.absUrl());
     })
   }
-  $scope.show = function(itemId) {
-    $http.get('/data/details', {params: { resource_id: itemId }})
+  $scope.show = function(item) {
+    $http.get('/data/details', {params: { resource_id: item.id }})
     .success(function(data){
-      $scope.resourceType = $routeParams.type;
+      $scope.resource = item;
       $scope.details = data.data;
     })
   }
@@ -93,11 +104,13 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
       $scope.snippet.jsonString = $filter('json')(data.json);
     })
   }
+
   $http.get('/data/demo', {params: { rel: 'example_resource_list'}})
    .success(function(data){
      $scope.snippets = data;
      $scope.loadExample($scope.snippets[0].file);
-   })
+  })
+
   $scope.save = function(){
     $http({
       method: 'POST',
