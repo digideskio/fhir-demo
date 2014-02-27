@@ -8,7 +8,7 @@
   </p>
   <div ng-show='showResult && !response.error'>
     <h4>Result</h4>
-    <pre style='font-size: 16px;' highlight='js'>{{1 + 1}}</pre>
+    <pre style='font-size: 16px;' highlight='js' code='{{response[0].json | compact | json }}'></pre>
   </div>
   <button ng-click="execute()" class="btn btn-success">Execute</button>
   <a ng-disabled='!isValid()'

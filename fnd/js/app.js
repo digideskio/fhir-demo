@@ -428,10 +428,13 @@ app.filter('highlight', function() {
 
 app.directive('highlight', function($filter, $parse) {
   return {
+    scope: {
+      code: '@'
+    },
     compile: function(tElement, tAttr) {
-      var lang = tAttr.highlight;
 
       return function(scope, element, attr) {
+        var lang = attr.highlight;
         highlightFilter = $filter('highlight');
 
         var htmlDecode = function(input) {
@@ -439,8 +442,12 @@ app.directive('highlight', function($filter, $parse) {
           e.innerHTML = input;
           return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
         }
-        var highlighted = highlightFilter(htmlDecode(content), lang);
-        element.html(highlighted, lang)
+
+        scope.$watch('code', function(value) {
+          var content = value;
+          var highlighted = highlightFilter(htmlDecode(content), lang);
+          element.html(highlighted, lang)
+        })
       }
     }
   }
