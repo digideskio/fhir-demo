@@ -74,18 +74,14 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter){
     })
   }
   $scope.show = function(item) {
-    $scope.resource = item;
     $http.get('/data/details', {params: { resource_id: item.id }})
     .success(function(data){
+      $scope.resource = item;
       $scope.details = data.data;
     })
   }
-   $http.get('/data/demo', {params: { rel: 'example_resource_list'}})
-    .success(function(data){
-      $scope.snippets = data;
-    })
   $scope.loadExample = function(file){
-    $scope.resource = "Loading " + file + '...';
+    $scope.snippet = "Loading " + file + '...';
     $http.get(
       '/data/demo/by_attr',
       {params: { rel: 'example_resource', col: 'file', val: file}}
@@ -93,6 +89,11 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter){
       $scope.snippet = $filter('json')(data.json);
     })
   }
+  $http.get('/data/demo', {params: { rel: 'example_resource_list'}})
+   .success(function(data){
+     $scope.snippets = data;
+     $scope.loadExample($scope.snippets[0].file);
+   })
   $scope.save = function(){
     $http({
       method: 'POST',
@@ -228,11 +229,21 @@ app.controller('QueriesCtrl', function($scope, $http){
   $http.get('/data/demo', {params: { rel: 'queries'}})
   .success(function(data){
     $scope.queries = data;
-    $scope.query = data[0];
+    $scope.show(data[0]);
   })
 
   $scope.show = function(query) {
-    $scope.query = query;
+    $scope.query = angular.copy(query);
+  }
+
+  $scope.saveAs = function() {
+    name = prompt('Enter name of query');
+    if (!name) return;
+    var query = {
+      query: $scope.query.query,
+      name: name
+    };
+    $scope.queries.push(query);
   }
 })
 
