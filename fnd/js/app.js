@@ -6,9 +6,12 @@ $(function(){
 
 app.config(['$routeProvider','$locationProvider',
   function($routeProvider, $locationProvider) {
-    // $locationProvider.html5Mode(true);
     $routeProvider.
       when('/demo/schema.html', {
+        templateUrl: 'views/demo/schema.html',
+        controller: 'BaseCtrl'
+      }).
+      when('/demo/schema/:name.html', {
         templateUrl: 'views/demo/schema.html',
         controller: 'BaseCtrl'
       }).
@@ -45,16 +48,16 @@ app.config(['$routeProvider','$locationProvider',
 app.controller('IndexCtrl', function($scope, $http){
 });
 
-app.controller('BaseCtrl', function($scope, $http){
- $http.get('/data/view', {params: { view: 'resource'}})
-  .success(function(data){
-    $scope.items = data;
-    $scope.show($scope.items[0])
-  })
+app.controller('BaseCtrl', function($scope, $http, $routeParams){
+  $http.get('/data/view', {params: { view: 'resource' }})
+    .success(function(data){
+      $scope.items = data;
+      $scope.show($routeParams.name || data[0].title);
+    })
 
-  $scope.show = function(item){
-    $scope.resource = item
-    $http.get('/data/show', {params: { resource: item.title}})
+  $scope.show = function(title){
+    $scope.resourceTitle = title;
+    $http.get('/data/show', {params: { resource: title}})
     .success(function(data){
       $scope.details = data;
     })
