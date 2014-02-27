@@ -86,7 +86,8 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter){
       '/data/demo/by_attr',
       {params: { rel: 'example_resource', col: 'file', val: file}}
     ).success(function(data){
-      $scope.snippet = $filter('json')(data.json);
+      $scope.snippet = data;
+      $scope.snippet.jsonString = $filter('json')(data.json);
     })
   }
   $http.get('/data/demo', {params: { rel: 'example_resource_list'}})
@@ -98,11 +99,12 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter){
     $http({
       method: 'POST',
       url: '/data/resource/create',
-      data: $scope.snippet
+      data: $scope.snippet.jsonString
     }).success(function(data){
       $scope.response = data
-      var newItem = JSON.parse($scope.snippet);
+      newItem = $scope.snippet.json;
       newItem.id = data.id;
+      console.log(newItem)
       $scope.items.push(newItem);
     }).error(function(data, status, header) {
       $scope.response = {};

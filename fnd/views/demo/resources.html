@@ -2,7 +2,7 @@
   <div class='row'>
     <div class='col-sm-3'>
       <h2 class="page-header">
-        <input class="form-control" ng-model="search.resourceType" placeholder="search"/>
+        <input class="form-control" ng-model="resSearch.resourceType" placeholder="search"/>
       </h2>
     </div>
     <div class='col-sm-9'>
@@ -19,7 +19,7 @@
       <a class="btn btn-success" ng-click='upload = true'> Upload
       </a>
       <hr />
-      <div ng-repeat="item in items | filter:search">
+      <div ng-repeat="item in items | filter:resSearch | orderBy:'resourceType'">
         <a href="javascript:void(0)" 
           ng-click="show(item)"
           role="button">{{item.resourceType}}</a>
@@ -79,7 +79,7 @@
       </div>
     </div>
     <div class='col-sm-9'>
-      <div ui-ace="{mode: 'json', useWrapMode: true}" ng-model='snippet'></div>
+      <div ui-ace="{mode: 'json', useWrapMode: true}" ng-model='snippet.jsonString'></div>
       <div class="alert alert-info">
         {{response | json}}
       </div>
