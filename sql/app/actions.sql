@@ -76,6 +76,12 @@ begin
 end;
 $$;
 --{{{
+select id
+from (
+  SELECT resource_id, unnest(family) as family
+  FROM fhir.patient_name
+) p
+where p.family ilike 'Donald%';
 --select * from fhir.resource;
 --select * from test.expanded_resource_tables;
 --}}}

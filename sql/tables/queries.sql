@@ -7,7 +7,11 @@ create table demo.queries (
   query text not null
 );
 insert into demo.queries(name, query) values('Insert new patient',
-E'SELECT fhir.insert_resource((''{"resourceType": "Patient", "name": [{"family":["Donald'' || round(random()*10^5) || ''"]}], "birthDate": "'' || current_timestamp || ''"}'')::json) as id');
+E'SELECT fhir.insert_resource((''{\n'
+'  "resourceType": "Patient",\n'
+'  "name": [{"family":["Donald'' || round(random()*10^5) || ''"]}],\n'
+'  "birthDate": "'' || current_timestamp || ''"\n'
+'}'')::json) as id');
   
 insert into demo.queries(name, query) values('Root resource records',
 E'SELECT *\n'
@@ -25,8 +29,11 @@ E'SELECT *\n'
 'FROM fhir.view_patient\n'
 'WHERE id in (\n'
 '  SELECT resource_id\n'
-'  FROM fhir.patient_name\n'
-'  WHERE ''Donald'' = any(family)\n'
+'  FROM (\n'
+'    SELECT resource_id, unnest(family) as family\n'
+'    FROM fhir.patient_name\n'
+'  ) p\n'
+'  WHERE p.family ilike ''Donald%'''
 ')\n'
 'LIMIT 1');
 insert into demo.queries(name, query) values('Patient name usage',
