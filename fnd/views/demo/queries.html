@@ -24,7 +24,7 @@
     <div style='height: 100%' ui-codemirror="{mode: 'text/x-plsql', lineWrapping: true, lineNumbers: true}" ng-model='query.query'></div>
     <div ng-show='result'>
       <h4>Result</h4>
-      <textarea style='height: 100%' ui-codemirror="{mode: 'javascript', lineWrapping: true, lineNumbers: true, readOnly: 'nocursor'}" ng-model='result'></textarea>
+      <pre highlight='{{result}}'></pre>
     </div>
   </div>
 </div>
