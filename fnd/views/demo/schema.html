@@ -20,7 +20,7 @@
     <h4 loading-spinner='details.length > 0'></h3>
     <ol>
       <li ng-repeat="item in details">
-        {{item.table_name}}
+			{{item.table_name}} <strong>({{item.path.join('.')}})</strong>
       </li>
     </ol>
 
