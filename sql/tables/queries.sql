@@ -6,6 +6,9 @@ create table demo.queries (
   name varchar not null,
   query text not null
 );
+insert into demo.queries(name, query) values('Insert new patient',
+E'SELECT fhir.insert_resource((''{"resourceType": "Patient", "name": [{"family":["Donald'' || round(random()*10^5) || ''"]}], "birthDate": "'' || current_timestamp || ''"}'')::json) as id');
+  
 insert into demo.queries(name, query) values('Root resource records',
 E'SELECT *\n'
 'FROM fhir.resource');

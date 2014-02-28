@@ -176,16 +176,13 @@ as $$
   for(var i=0; i<list.length; i++){
 				var id = list[i]['id'];
 				var view = list[i]['_type'];
-				var obj = plv8.execute( "SELECT t.json from fhir.view_" + view + ' t')[0]['json'];
+				var obj = plv8.execute("SELECT t.json from fhir.view_" + view + " t where id = '" + id + "'")[0]['json'];
 				res.push(obj);
 				}
-	 return JSON.stringify(res);
- var sql =  "SELECT array_to_json(array_agg(t.json))::varchar as json from fhir.view_" + req.uri_args.type + ' t limit 100'
- plv8.elog(NOTICE, sql)
- return plv8.execute(sql)[0]['json'];
+	return JSON.stringify(res);
 $$;
 
---SELECT actions.resource('{"uri_args": {"type": "patient"}}'::json);
+SELECT actions.resource('{"uri_args": {"type": "patient"}}'::json);
 --}}}
 
 --{{{
@@ -203,6 +200,8 @@ $$;
 --}}}
 --{{{
 --SELECT ('{"id": "' || fhir.insert_resource('{"resourceType": "Patient"}'::json) || '"}')::json;
+delete from fhir.resource;
+SELECT ('{"id": "' || fhir.insert_resource('{"resourceType": "Patient"}'::json) || '"}')::json;
 --}}}
 
 --{{{
