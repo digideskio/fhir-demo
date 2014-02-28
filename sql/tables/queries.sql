@@ -20,7 +20,11 @@ E'SELECT *\n'
 insert into demo.queries(name, query) values('Patient resource with condition',
 E'SELECT *\n'
 'FROM fhir.view_patient\n'
-'WHERE id in (select resource_id from fhir.patient_name where ''MINT_TEST'' = any(family))\n'
+'WHERE id in (\n'
+'  SELECT resource_id\n'
+'  FROM fhir.patient_name\n'
+'  WHERE ''MINT_TEST'' = any(family)\n'
+')\n'
 'LIMIT 1');
 insert into demo.queries(name, query) values('Patient name usage',
 E'SELECT unnest(family) as family, count(*) as count\n'
