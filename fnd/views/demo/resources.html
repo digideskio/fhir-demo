@@ -84,7 +84,7 @@
     </div>
     <div class='col-sm-9'>
       <h4 loading-spinner='snippetLoading'></h4>
-      <div ui-codemirror="{mode: 'javascript', lineWrapping: true, lineNumbers: true}" ng-model='snippet.jsonString' style='height: 100%'></div>
+      <textarea ui-codemirror="{mode: 'javascript', lineWrapping: true, lineNumbers: true}" ng-model='snippet.jsonString' style='height: 100%'></textarea>
       <div class="alert alert-info">
         {{response | json}}
       </div>
