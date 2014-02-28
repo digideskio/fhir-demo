@@ -79,7 +79,7 @@
       </div>
     </div>
     <div class='col-sm-9'>
-      <div ui-ace="{mode: 'json', useWrapMode: true}" ng-model='snippet.jsonString'></div>
+      <div ui-codemirror="{mode: 'javascript', lineWrapping: true, lineNumbers: true}" ng-model='snippet.jsonString' style='height: 100%'></div>
       <div class="alert alert-info">
         {{response | json}}
       </div>

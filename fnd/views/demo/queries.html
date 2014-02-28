@@ -21,10 +21,10 @@
     </div>
   </div>
   <div class='col-sm-9'>
-    <div ui-ace="{mode: 'sql', useWrapMode: true}" ng-model='query.query'></div>
+    <div style='height: 100%' ui-codemirror="{mode: 'text/x-plsql', lineWrapping: true, lineNumbers: true}" ng-model='query.query'></div>
     <div ng-show='query_items.length != 0'>
       <h4>Result</h4>
-      <pre>{{query_items | compact | json}}</pre>
+      <pre highlight='{{query_items | compact | json}}'></pre>
     </div>
   </div>
 </div>
