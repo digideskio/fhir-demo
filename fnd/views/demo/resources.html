@@ -6,7 +6,7 @@
       </h2>
     </div>
     <div class='col-sm-9'>
-      <h2 class="page-header">
+      <h2 class="page-header" ng-show='resource'>
         {{ resource.resourceType }}
         <a ng-click="deleteResource()" class="btn btn-danger">
           Delete
@@ -19,6 +19,7 @@
       <a class="btn btn-success" ng-click='upload = true'> Upload
       </a>
       <hr />
+      <h4 loading-spinner='resource'></h4>
       <div ng-repeat="item in items | filter:resSearch | orderBy:'resourceType'">
         <a href="#demo/resources/{{item.resourceType}}/{{item.id}}.html" 
           ng-click="show(item)"
@@ -26,30 +27,33 @@
       </div>
     </div>
     <div class='col-sm-9'>
-      <ol>
-        <li ng-repeat="item in details">
-        {{item.table_name}}
-        </li>
-      </ol>
+      <h4 loading-spinner='resource'></h3>
+      <div ng-show='resource'>
+        <ol>
+          <li ng-repeat="item in details">
+          {{item.table_name}}
+          </li>
+        </ol>
 
-      <div ng-repeat="item in details">
-        <table class='table table-bordered'>
-          <caption>{{item.table_name}}</caption>
-          <thead>
-            <tr>
-              <th ng-repeat="head in item.headers">
-                {{head}}
-              </th>
+        <div ng-repeat="item in details">
+          <table class='table table-bordered'>
+            <caption>{{item.table_name}}</caption>
+            <thead>
+              <tr>
+                <th ng-repeat="head in item.headers">
+                  {{head}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in item.data">
+              <td ng-repeat="head in item.headers">
+                {{row[head]}}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-          <tr ng-repeat="row in item.data">
-            <td ng-repeat="head in item.headers">
-              {{row[head]}}
-            </td>
-          </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
