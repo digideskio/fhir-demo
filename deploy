@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+. ./env.sh
+echo 'Recreate database...'
+psql template1 -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$PGDATABASE' AND pid <> pg_backend_pid()"
+psql template1 -c "DROP DATABASE $PGDATABASE"
+curl https://raw.github.com/fhirbase/fhirbase/master/fhirbase-full.sql | psql template1
+echo 'Update code'
+git reset --hard
+git pull
+echo 'Compile code'
+. ./compile
+echo 'Restart nginx'
+. ./configure_nginx
