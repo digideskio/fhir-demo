@@ -32,7 +32,7 @@ VALUES
 CREATE SCHEMA IF NOT EXISTS lib;
 CREATE EXTENSION IF NOT EXISTS plv8;
 
-DROP FUNCTION lib.dispatch(json);
+DROP FUNCTION IF EXISTS lib.dispatch(json);
 
 CREATE or REPLACE
 FUNCTION lib.dispatch(req json)
@@ -60,8 +60,8 @@ as $$
   }
 $$;
 
-select lib.dispatch('{"a":1}'::json);
-select lib.dispatch('{"uri_args": {"echo":1}}'::json);
-select lib.dispatch('{"uri": "/data/about"}'::json);
-select lib.dispatch(NULL);
+--select lib.dispatch('{"a":1}'::json);
+--select lib.dispatch('{"uri_args": {"echo":1}}'::json);
+--select lib.dispatch('{"uri": "/data/about"}'::json);
+--select lib.dispatch(NULL);
 --}}}
