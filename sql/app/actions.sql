@@ -22,7 +22,7 @@ as $$
   return plv8.execute( "SELECT array_to_json(array_agg(row_to_json(t.*)))::varchar as json from view." + req.uri_args.view + ' t')[0]['json'];
 $$;
 
-SELECT actions.view('{"uri_args": {"view": "resource"}}'::json);
+--SELECT actions.view('{"uri_args": {"view": "resource"}}'::json);
 --}}}
 CREATE or REPLACE
 FUNCTION actions.get_tables(req json)
@@ -41,7 +41,7 @@ as $$
  return plv8.execute("SELECT array_to_json(array_agg(row_to_json(t.*)))::varchar as json from test.expanded_resource_tables t where resource_name = '" + req.uri_args.resource + "'")[0]['json']
 $$;
 
-SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
+--SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
 --}}}
 --{{{
 drop function if exists actions.delete_resource(json);
@@ -58,7 +58,7 @@ as $$
  return JSON.stringify({id: resource_id });
 $$;
 
-SELECT actions.delete_resource(('{"uri_args": {"resource_id": "' || (select id from fhir.resource limit 1)::varchar || '"}}')::json);
+--SELECT actions.delete_resource(('{"uri_args": {"resource_id": "' || (select id from fhir.resource limit 1)::varchar || '"}}')::json);
 --}}}
 drop function if exists actions.update_resource(json);
 CREATE or REPLACE
@@ -75,8 +75,8 @@ begin
 end;
 $$;
 --{{{
-select * from fhir.resource;
-select * from test.expanded_resource_tables;
+--select * from fhir.resource;
+--select * from test.expanded_resource_tables;
 --}}}
 
 --{{{
@@ -90,8 +90,10 @@ as $$
   var resource_tables = plv8.execute("SELECT t.* from test.expanded_resource_tables t where resource_name = '" + resource_type + "'");
   var res = [];
   for(var i=0; i<resource_tables.length; i++){
-				var table_name = resource_tables[i]['table_name'];
-				var resource_name = resource_tables[i]['resource_name'];
+				var rt = resource_tables[i];
+				var table_name = rt['table_name'];
+				var resource_name = rt['resource_name'];
+				var path = rt['path'];
 				if (table_name != 'patient_photo') {
 				var columns = resource_tables[i]['columns'];
 				var where = 'id'
@@ -127,7 +129,7 @@ as $$
 																}
 												if (is) {headers.push(k);}
 												}
-								var obj = {'table_name': table_name, headers: headers, data: sel};
+								var obj = {'table_name': table_name, 'path': path, headers: headers, data: sel};
 								res.push(obj);
 				}
 				}
@@ -136,12 +138,12 @@ as $$
 	 return JSON.stringify(json);
 $$;
 
-SELECT actions.details(('{"uri_args": {"resource_id": "' || (select id from fhir.resource limit 1)::varchar || '"}}')::json);
+--SELECT actions.details(('{"uri_args": {"resource_id": "' || (select id from fhir.resource limit 1)::varchar || '"}}')::json);
 --}}}
 
 --{{{
+--SELECT t.path from test.expanded_resource_tables t;
 
-select * from fhir.resource where id = resouce_id;
 --}}}
 
 --{{{
@@ -160,7 +162,7 @@ as $$
  }
 $$;
 
-SELECT actions.query('{"uri_args": {"q": "select * from fhir.patient"}}'::json);
+--SELECT actions.query('{"uri_args": {"q": "select * from fhir.patient"}}'::json);
 --}}}
 
 --{{{
@@ -183,7 +185,7 @@ as $$
  return plv8.execute(sql)[0]['json'];
 $$;
 
-SELECT actions.resource('{"uri_args": {"type": "patient"}}'::json);
+--SELECT actions.resource('{"uri_args": {"type": "patient"}}'::json);
 --}}}
 
 --{{{
@@ -197,10 +199,10 @@ BEGIN
 END
 $$;
 
-SELECT actions.create_resource('{"request_body": {"resourceType": "Patient"}, "uri_args": {"type": "patient"}}'::json);
+--SELECT actions.create_resource('{"request_body": {"resourceType": "Patient"}, "uri_args": {"type": "patient"}}'::json);
 --}}}
 --{{{
-SELECT ('{"id": "' || fhir.insert_resource('{"resourceType": "Patient"}'::json) || '"}')::json;
+--SELECT ('{"id": "' || fhir.insert_resource('{"resourceType": "Patient"}'::json) || '"}')::json;
 --}}}
 
 --{{{
@@ -229,11 +231,4 @@ $$;
 --}}}
 
 --}}}
-CREATE SCHEMA IF NOT EXISTS view;
-CREATE OR REPLACE
-VIEW view.resource AS (
-  select unnest(path) as title from meta.resource_elements
-  where array_length(path,1) = 1
-  order by title
-);
 --}}}
