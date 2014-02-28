@@ -76,7 +76,10 @@ begin
 end;
 $$;
 --{{{
-select id
+SELECT fhir.update_resource(resource_id::uuid, req->'request_body');
+--}}}
+--{{{
+select resource_id
 from (
   SELECT resource_id, unnest(family) as family
   FROM fhir.patient_name

@@ -9,21 +9,32 @@ create table demo.queries (
 insert into demo.queries(name, query) values('Insert new patient',
 E'SELECT fhir.insert_resource((''{\n'
 '  "resourceType": "Patient",\n'
-'  "name": [{"family":["Donald'' || round(random()*10^5) || ''"]}],\n'
+'  "name": [{"family":["Donald'' || round(random()*10^3) || ''"]}],\n'
 '  "birthDate": "'' || current_timestamp || ''"\n'
 '}'')::json) as id');
+
+insert into demo.queries(name, query) values('Update patient',
+E'SELECT fhir.update_resource((SELECT id FROM fhir.patient limit 1),\n'
+'(''{\n'
+'  "resourceType": "Patient",\n'
+'  "name": [{"family":["Pedro'' || round(random()*10^3) || ''"]}],\n'
+'  "birthDate": "'' || current_timestamp || ''"\n'
+'}'')::json)');
   
 insert into demo.queries(name, query) values('Root resource records',
 E'SELECT *\n'
 'FROM fhir.resource');
+
 insert into demo.queries(name, query) values('Root patient record',
 E'SELECT *\n'
 'FROM fhir.patient\n'
 'LIMIT 1');
+
 insert into demo.queries(name, query) values('Patient resource',
 E'SELECT *\n'
 'FROM fhir.view_patient\n'
 'LIMIT 1');
+
 insert into demo.queries(name, query) values('Patient resource with condition',
 E'SELECT *\n'
 'FROM fhir.view_patient\n'
@@ -36,6 +47,7 @@ E'SELECT *\n'
 '  WHERE p.family ilike ''Donald%'''
 ')\n'
 'LIMIT 1');
+
 insert into demo.queries(name, query) values('Patient name usage',
 E'SELECT unnest(family) as family, count(*) as count\n'
 'FROM fhir.patient_name\n'
