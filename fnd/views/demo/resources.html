@@ -31,13 +31,13 @@
       <div ng-show='resource'>
         <ol>
           <li ng-repeat="item in details">
-				{{item.table_name}} <strong>({{item.path.join('.')}})</strong>
+            {{item.table_name}} <strong>({{item.path.join('.')}})</strong>
           </li>
         </ol>
 
         <div ng-repeat="item in details">
+          <h4>{{item.table_name}} <strong>({{item.path.join('.')}})</strong></h4>
           <table class='table table-bordered'>
-            <caption>{{item.table_name}} <strong>({{item.path.join('.')}})</strong></caption>
             <thead>
               <tr>
                 <th ng-repeat="head in item.headers">
