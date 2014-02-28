@@ -23,7 +23,7 @@ E'SELECT *\n'
 'WHERE id in (\n'
 '  SELECT resource_id\n'
 '  FROM fhir.patient_name\n'
-'  WHERE ''MINT_TEST'' = any(family)\n'
+'  WHERE ''Donald'' = any(family)\n'
 ')\n'
 'LIMIT 1');
 insert into demo.queries(name, query) values('Patient name usage',
