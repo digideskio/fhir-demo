@@ -49,24 +49,30 @@ app.controller('IndexCtrl', function($scope, $http){
 });
 
 app.controller('BaseCtrl', function($scope, $http, $routeParams){
+  $scope.listLoading = true;
   $http.get('/data/view', {params: { view: 'resource' }})
     .success(function(data){
+      $scope.listLoading = false;
       $scope.items = data;
       $scope.show($routeParams.name || data[0].title);
     })
 
   $scope.show = function(title){
     $scope.resourceTitle = title;
+    $scope.loadingDetails = true;
     $http.get('/data/show', {params: { resource: title}})
     .success(function(data){
+      $scope.loadingDetails = false;
       $scope.details = data;
     })
   }
 });
 
 app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $location){
+  $scope.listLoading = true;
   $http.get('/data/resource', {params: {type: 'patient'}})
   .success(function(data){
+    $scope.listLoading = false;
     $scope.items = data;
     var item;
     if ($routeParams.id)
@@ -79,27 +85,35 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
     $scope.show(item);
   })
   $scope.deleteResource = function(){
-    $http.get('/data/delete', {params: { 'resource_id': $routeParams.id}})
+    $http.get('/data/delete', {params: { 'resource_id': $routeParams.id ? $routeParams.id : $scope.items[0].id}})
     .success(function(data){
-      var index = $scope.items.map(function(item) { item.id }).indexOf($routeParams.id);
+      var index;
+      if ($routeParams.id)
+        index = $scope.items.map(function(item) { item.id }).indexOf($routeParams.id);
+      else
+        index = 0
       $scope.items.splice(index, 1);
       $location.path('/demo/resources.html');
-      console.log($location.absUrl());
     })
   }
   $scope.show = function(item) {
+    if (!item) return;
     $scope.resource = item;
+    $scope.resourceLoading = true;
     $http.get('/data/details', {params: { resource_id: item.id }})
     .success(function(data){
+      $scope.resourceLoading = false;
       $scope.details = data.data;
     })
   }
   $scope.loadExample = function(file){
     $scope.snippet = "Loading " + file + '...';
+    $scope.snippetLoading = true;
     $http.get(
       '/data/demo/by_attr',
       {params: { rel: 'example_resource', col: 'file', val: file}}
     ).success(function(data){
+      $scope.snippetLoading = false;
       $scope.snippet = data;
       $scope.snippet.jsonString = $filter('json')(data.json);
     })
@@ -486,6 +500,6 @@ app.directive('highlight', function($filter, $parse) {
 app.directive('loadingSpinner', function() {
   return {
     scope: { cond: '=loadingSpinner'},
-    template: "<span ng-hide='cond' class='spinner glyphicon glyphicon-refresh'></span>"
+    template: "<span ng-show='cond' class='spinner glyphicon glyphicon-refresh'></span>"
   }
 })
