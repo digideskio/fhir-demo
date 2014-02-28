@@ -37,15 +37,9 @@ E'SELECT *\n'
 
 insert into demo.queries(name, query) values('Patient resource with condition',
 E'SELECT *\n'
-'FROM fhir.view_patient\n'
-'WHERE id in (\n'
-'  SELECT resource_id\n'
-'  FROM (\n'
-'    SELECT resource_id, unnest(family) as family\n'
-'    FROM fhir.patient_name\n'
-'  ) p\n'
-'  WHERE p.family ilike ''Donald%'''
-')\n'
+'FROM fhir.view_patient vp,\n'
+'LATERAL (SELECT unnest(family) AS family FROM fhir.patient_name pn WHERE pn.resource_id = vp.id) fam\n'
+'WHERE fam.family ilike ''Donald%'''
 'LIMIT 1');
 
 insert into demo.queries(name, query) values('Patient name usage',
