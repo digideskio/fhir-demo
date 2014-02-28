@@ -1,6 +1,0 @@
-[
-  {"label": "Home", "name": "index"},
-  {"label": "FHIRbase", "name": "base"},
-  {"label": "Resources", "name": "resources"},
-  {"label": "Queries", "name": "queries"}
-]
