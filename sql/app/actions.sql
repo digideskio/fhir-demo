@@ -101,18 +101,23 @@ as $$
       continue;
     }
 
-    var where = 'id'
-    for (var j=0; j< columns.length; j++) {
-      if (columns[j]['column_name'] == 'resource_id') {
-        where = 'resource_id';
+    var contruct_query = function() {
+      var where = 'id'
+      for (var j = 0; j < columns.length; j++) {
+        if (columns[j]['column_name'] == 'resource_id') {
+          where = 'resource_id';
+          break;
+        }
       }
+      return "SELECT * from fhir." + table_name + " where " + where + " = '" + resource_id + "'";
     }
 
-    var sel = plv8.execute("SELECT * from fhir." + table_name + " where " + where + " = '" + resource_id + "'");
-    for(var m=0;m<sel.length;m++){
-        var row = sel[m];
-        for (var jj=0; jj< columns.length; jj++) {
+    var format_result = function(data) {
+      for(var m = 0; m < data.length; m++){
+        var row = data[m];
+        for (var jj = 0; jj < columns.length; jj++) {
           var col_name = columns[jj]['column_name'];
+
           if (row[col_name]) {
             var data_type = columns[jj]['data_type'];
             if (data_type == 'uuid') {
@@ -120,22 +125,33 @@ as $$
             } else if (data_type == 'date' || data_type == 'timestamp without time zone') {
               row[col_name] = new Date(Date.parse(row[col_name])).toString();
             }
+          }
         }
       }
     }
+
+    var collect_headers = function() {
+      var headers = [];
+      for(var k in sel[0]) {
+        var is = false;
+        for(var m = 0; m < sel.length; m++){
+          if (sel[m][k]) {
+            is = true;
+          }
+        }
+        if (is) {
+          headers.push(k);
+        }
+      }
+      return headers;
+    }
+
+    var sel = plv8.execute(contruct_query());
+    format_result(sel);
+
     if (sel.length > 0) {
-            var headers = [];
-            for(var k in sel[0]) {
-                    var is = false;
-                    for(var m=0;m<sel.length;m++){
-                            if (sel[m][k]) {
-                            is = true;
-                            }
-                            }
-                    if (is) {headers.push(k);}
-                    }
-            var obj = {'table_name': table_name, 'path': path, headers: headers, data: sel};
-            res.push(obj);
+      var obj = {'table_name': table_name, 'path': path, headers: collect_headers(), data: sel};
+      res.push(obj);
     }
   }
 
