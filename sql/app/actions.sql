@@ -90,8 +90,10 @@ as $$
   var resource_tables = plv8.execute("SELECT t.* from test.expanded_resource_tables t where resource_name = '" + resource_type + "'");
   var res = [];
   for(var i=0; i<resource_tables.length; i++){
-				var table_name = resource_tables[i]['table_name'];
-				var resource_name = resource_tables[i]['resource_name'];
+				var rt = resource_tables[i];
+				var table_name = rt['table_name'];
+				var resource_name = rt['resource_name'];
+				var path = rt['path'];
 				if (table_name != 'patient_photo') {
 				var columns = resource_tables[i]['columns'];
 				var where = 'id'
@@ -127,7 +129,7 @@ as $$
 																}
 												if (is) {headers.push(k);}
 												}
-								var obj = {'table_name': table_name, headers: headers, data: sel};
+								var obj = {'table_name': table_name, 'path': path, headers: headers, data: sel};
 								res.push(obj);
 				}
 				}
@@ -140,6 +142,7 @@ SELECT actions.details(('{"uri_args": {"resource_id": "' || (select id from fhir
 --}}}
 
 --{{{
+SELECT t.path from test.expanded_resource_tables t;
 
 select * from fhir.resource where id = resouce_id;
 --}}}

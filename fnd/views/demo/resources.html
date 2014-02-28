@@ -28,13 +28,13 @@
     <div class='col-sm-9'>
       <ol>
         <li ng-repeat="item in details">
-        {{item.table_name}}
+				{{item.table_name}} <strong>({{item.path.join('.')}})</strong>
         </li>
       </ol>
 
       <div ng-repeat="item in details">
         <table class='table table-bordered'>
-          <caption>{{item.table_name}}</caption>
+								<caption>{{item.table_name}} <strong>({{item.path.join('.')}})</strong></caption>
           <thead>
             <tr>
               <th ng-repeat="head in item.headers">

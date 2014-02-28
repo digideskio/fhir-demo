@@ -23,6 +23,7 @@ test.columns AS (
 CREATE
 VIEW test.resource_tables as (
   SELECT
+    path,
     path[1] as resource_name,
     table_name(path) as table_name,
     resource_table_name(path) as resource_table_name,
@@ -39,6 +40,7 @@ VIEW test.resource_tables as (
   FROM meta.compound_resource_elements e
   UNION
   SELECT
+    path,
     path[1],
     table_name(path) as table_name,
     resource_table_name(path) as resource_table_name,
@@ -53,12 +55,13 @@ create type test.resource_desc as (table_name varchar, columns json);
 
 create view test.expanded_resource_tables as
   select
+    rt.path,
     rt.resource_name,
     rt.table_name,
     array_to_json(array_agg((c.column_name, c.data_type)::test.column_desc order by c.ordinal_position)) as columns
   from test.resource_tables rt
   join test.columns c on c.table_name = rt.table_name
-  group by rt.resource_name, rt.table_name;
+  group by rt.path, rt.resource_name, rt.table_name;
 
 create view test.resource_description as
   select resource_name, array_to_json(array_agg((table_name, columns)::test.resource_desc)) as description from test.expanded_resource_tables
