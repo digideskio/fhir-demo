@@ -10,12 +10,14 @@
 </div>
 <div class='row'>
   <div class='col-sm-3'>
+    <h4 loading-spinner='items.length > 0'></h3>
     <div ng-repeat="item in items | filter:search">
       <a href="#demo/schema/{{item.title}}.html" 
         role="button">{{item.title}}</a>
     </div>
   </div>
   <div class='col-sm-9'>
+    <h4 loading-spinner='details.length > 0'></h3>
     <ol>
       <li ng-repeat="item in details">
         {{item.table_name}}

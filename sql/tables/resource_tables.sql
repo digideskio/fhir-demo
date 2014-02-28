@@ -1,3 +1,11 @@
+CREATE SCHEMA IF NOT EXISTS view;
+CREATE OR REPLACE
+VIEW view.resource AS (
+  select unnest(path) as title from meta.resource_elements
+  where array_length(path,1) = 1
+  order by title
+);
+
 drop schema if exists test cascade;
 create schema test;
 
@@ -25,9 +33,9 @@ VIEW test.resource_tables as (
   SELECT
     path,
     path[1] as resource_name,
-    table_name(path) as table_name,
-    resource_table_name(path) as resource_table_name,
-    parent_table_name(path) as parent_table_name,
+    fhir.table_name(path) as table_name,
+    fhir.resource_table_name(path) as resource_table_name,
+    fhir.parent_table_name(path) as parent_table_name,
     case
       when array_length(path, 1) > 1 then 'resource_component'
       else 'resource'
@@ -35,16 +43,16 @@ VIEW test.resource_tables as (
     coalesce((
       SELECT array_agg(column_ddl)
         FROM meta.resource_columns rc
-       WHERE array_pop(rc.path) = e.path
+       WHERE fhir.array_pop(rc.path) = e.path
     ), ARRAY[]::varchar[]) as columns
   FROM meta.compound_resource_elements e
   UNION
   SELECT
     path,
     path[1],
-    table_name(path) as table_name,
-    resource_table_name(path) as resource_table_name,
-    parent_table_name(path) as parent_table_name,
+    fhir.table_name(path) as table_name,
+    fhir.resource_table_name(path) as resource_table_name,
+    fhir.parent_table_name(path) as parent_table_name,
     base_table,
     array[]::varchar[] as columns
   FROM meta.expanded_with_dt_resource_elements

@@ -88,9 +88,9 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
     })
   }
   $scope.show = function(item) {
+    $scope.resource = item;
     $http.get('/data/details', {params: { resource_id: item.id }})
     .success(function(data){
-      $scope.resource = item;
       $scope.details = data.data;
     })
   }
@@ -482,3 +482,10 @@ app.directive('highlight', function($filter, $parse) {
     }
   }
 });
+
+app.directive('loadingSpinner', function() {
+  return {
+    scope: { cond: '=loadingSpinner'},
+    template: "<span ng-hide='cond' class='spinner glyphicon glyphicon-refresh'></span>"
+  }
+})
