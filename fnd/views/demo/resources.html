@@ -19,7 +19,7 @@
       <a class="btn btn-success" ng-click='upload = true'> Upload
       </a>
       <hr />
-      <h4 loading-spinner='resource'></h4>
+      <h4 loading-spinner='listLoading'></h4>
       <div ng-repeat="item in items | filter:resSearch | orderBy:'resourceType'">
         <a href="#demo/resources/{{item.resourceType}}/{{item.id}}.html" 
           ng-click="show(item)"
@@ -27,17 +27,17 @@
       </div>
     </div>
     <div class='col-sm-9'>
-      <h4 loading-spinner='resource'></h3>
+      <h4 loading-spinner='resourceLoading'></h4>
       <div ng-show='resource'>
         <ol>
           <li ng-repeat="item in details">
-				{{item.table_name}} <strong>({{item.path.join('.')}})</strong>
+            {{item.table_name}} <strong>({{item.path.join('.')}})</strong>
           </li>
         </ol>
 
         <div ng-repeat="item in details">
+          <h4>{{item.table_name}} <strong>({{item.path.join('.')}})</strong></h4>
           <table class='table table-bordered'>
-            <caption>{{item.table_name}} <strong>({{item.path.join('.')}})</strong></caption>
             <thead>
               <tr>
                 <th ng-repeat="head in item.headers">
@@ -83,6 +83,7 @@
       </div>
     </div>
     <div class='col-sm-9'>
+      <h4 loading-spinner='snippetLoading'></h4>
       <div ui-codemirror="{mode: 'javascript', lineWrapping: true, lineNumbers: true}" ng-model='snippet.jsonString' style='height: 100%'></div>
       <div class="alert alert-info">
         {{response | json}}
