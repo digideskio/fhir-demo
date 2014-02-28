@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute','ngSanitize', 'ui.ace', 'ngCookies', 'ui.codemirror'])
+var app = angular.module('app', ['ngRoute','ngSanitize', 'ngCookies', 'ui.codemirror'])
 
 $(function(){
   $('.collapse').collapse()
