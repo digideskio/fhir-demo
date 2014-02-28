@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute','ngSanitize', 'ui.ace', 'ngCookies'])
+var app = angular.module('app', ['ngRoute','ngSanitize', 'ui.ace', 'ngCookies', 'ui.codemirror'])
 
 $(function(){
   $('.collapse').collapse()
@@ -231,7 +231,6 @@ app.controller('QueriesCtrl', function($scope, $http){
     $scope.tables = data;
   });
 
-  $scope.query = { query: "select * from fhir.view_patient order by id" };
   $scope.query_items = [];
 
   $scope.executeQuery = function() {
@@ -469,38 +468,17 @@ app.directive('goToNextStep', function(Wizard) {
   }
 })
 
-app.filter('highlight', function() {
-  return function(text, lang) {
-    if (lang)
-      return hljs.highlight(lang, text).value;
-    else
-      return hljs.highlightAuto(text).value;
-  }
-})
-
 app.directive('highlight', function($filter, $parse) {
   return {
-    scope: {
-      code: '@'
-    },
-    compile: function(tElement, tAttr) {
-
-      return function(scope, element, attr) {
-        var lang = attr.highlight;
-        highlightFilter = $filter('highlight');
-
-        var htmlDecode = function(input) {
-          var e = document.createElement('div');
-          e.innerHTML = input;
-          return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-        }
-
-        scope.$watch('code', function(value) {
-          var content = value;
-          var highlighted = highlightFilter(htmlDecode(content), lang);
-          element.html(highlighted, lang)
-        })
+    scope: { code: '@highlight' },
+    link: function(scope, element, attr) {
+      var htmlEncode = function(input) {
+        return angular.element('<div/>').text(input).html();
       }
+      scope.$watch('code', function(value) {
+        element.html(htmlEncode(value));
+        hljs.highlightBlock(element[0]);
+      })
     }
   }
 });
