@@ -92,7 +92,7 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
   };
 });
 
-app.controller('QueriesCtrl', function($scope, $http){
+app.controller('QueriesCtrl', function($scope, $http, $filter){
   $http.get('/data/resource', {params: {type: 'patient'}})
   .success(function(data){
     $scope.items = data;
@@ -102,15 +102,16 @@ app.controller('QueriesCtrl', function($scope, $http){
     $scope.tables = data;
   });
 
-  $scope.query_items = [];
-
   $scope.executeQuery = function() {
+    var compact = $filter('compact');
+    var jsonize = $filter('json');
+    $scope.loaded = false;
     $http.get('/data/query', {params: {q: $scope.query.query}})
     .success(function(data){
-      $scope.query_items = data;
+      $scope.result = jsonize(compact(data));
+      $scope.loaded = true;
     })
   }
-
   $http.get('/data/demo', {params: { rel: 'queries'}})
   .success(function(data){
     $scope.queries = data;
