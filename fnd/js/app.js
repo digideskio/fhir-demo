@@ -23,11 +23,6 @@ app.config(['$routeProvider','$locationProvider',
         templateUrl: 'views/demo/queries.html',
         controller: 'QueriesCtrl'
       }).
-      when('/guide/:step.html', {
-        templateUrl: function(params) {
-          return 'views/guide/' + params.step + '.html';
-        }
-      }).
       otherwise({
         redirectTo: '/index.html'
       });
