@@ -23,7 +23,11 @@ app.config(['$routeProvider','$locationProvider',
         templateUrl: 'views/demo/queries.html',
         controller: 'QueriesCtrl'
       }).
+      when('/demo/index.html', {
+        templateUrl: 'views/demo/index.html',
+        controller: 'IndexCtrl'
+      }).
       otherwise({
-        redirectTo: '/demo/schema.html'
+        redirectTo: '/demo/index.html'
       });
 }]);

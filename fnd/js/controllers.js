@@ -156,4 +156,7 @@ app.controller('QueriesCtrl', function($scope, $http, $filter){
     };
     $scope.queries.push(query);
   }
-})
+});
+
+app.controller('IndexCtrl', function($scope, $http, $routeParams){
+});

@@ -17,13 +17,16 @@
     <div ng-repeat="query in queries | filter:search">
       <a href="javascript:void(0)" 
         ng-click="show(query)"
-        role="button">{{query.name}}</a>
+        role="button">{{query.name}}
+      </a>
     </div>
   </div>
   <div class='col-sm-9'>
     <div class='alert alert-warning'>
-      <p>At this page you can prepare and execute arbitrary query on demo database</p>
-      <p>Also you can execute samples from the left list</p>
+      <ul>
+        <li>At this page you can prepare and execute arbitrary query on demo database</li>
+        <li>Also you can execute samples from the left list.</li>
+      </ul>
     </div>
     <div style='height: 100%' ui-codemirror="{mode: 'text/x-plsql', lineWrapping: true, lineNumbers: true}" ng-model='query.query'></div>
     <div ng-show='result'>
