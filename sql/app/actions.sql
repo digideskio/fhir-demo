@@ -97,6 +97,7 @@ language plv8
 as $$
   var resource_id = req.uri_args.resource_id;
   var resource_type = plv8.execute("SELECT r.resource_type from fhir.resource r where r.id = '" + resource_id + "'")[0]['resource_type'];
+  var resource_json = plv8.execute( "SELECT t.json from fhir.view_" + resource_type + " t where id = '" + resource_id + "'")[0]['json'];
   var resource_tables = plv8.execute("SELECT t.* from test.expanded_resource_tables t where resource_name = '" + resource_type + "'");
   var res = [];
   for(var i=0; i<resource_tables.length; i++){
@@ -164,7 +165,7 @@ as $$
     }
   }
 
-  var json = {'resource_name': resource_name, 'resource_id': resource_id, data: res}
+  var json = {'resource_name': resource_name, 'resource_id': resource_id, data: res, resource_json: resource_json}
   return JSON.stringify(json);
 $$;
 

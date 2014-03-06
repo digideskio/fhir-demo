@@ -17,28 +17,38 @@
     </div>
   </div>
   <div class='col-sm-9'>
+    <div class='well alert fade in'>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <p><strong>Left list</strong> shows all resources available in current (version) fhir implementation</p>
+      <p>Use <strong>search area</strong> to find resource you want to investigate</p>
+      <p>Below you can see <strong>list of tables</strong> and corresponding property path (in square brackets) that store selected resource</p>
+      <p>Click "Go" to see structure details of resource table</p>
+      <p>Inherited columns are separated from data columns with gray color</p>
+    </div>
     <h3 loading-spinner='loadingDetails'></h3>
     <ol>
       <li ng-repeat="item in details">
-			{{item.table_name}} <strong>({{item.path.join('.')}})</strong>
+        {{item.table_name}} <strong>({{item.path.join('.')}})</strong>
+        <a ng-click="locateTable(item.table_name)" class="btn btn-xs btn-default">Go</a>
       </li>
     </ol>
 
-    <div ng-repeat="item in details" class="alert alert-error">
+    <div id="{{item.table_name}}" ng-repeat="item in details" class="alert alert-error">
       <table class='table table-bordered table-condensed' style="width: auto;">
         <caption style='padding: 5px 0; font-weight: bold; font-size: 150%;'>
           {{item.table_name}}
         </caption>
         <tr ng-repeat="column in item.columns">
-          <td>
+          <td class="{{columnClass(column.column_name)}}">
             {{column.column_name}}
           </td>
-          <td>
+          <td class="{{columnClass(column.column_name)}}">
             {{column.data_type}}
           </td>
         </tr>
         </tbody>
       </table>
+      <a ng-click="locateTop()" class="btn btn-xs btn-default">Up</a>
     </div>
   </div>
 </div>

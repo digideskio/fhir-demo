@@ -18,6 +18,22 @@ app.controller('BaseCtrl', function($scope, $http, $routeParams){
       $scope.details = data;
     })
   }
+
+  $scope.columnClass = function(column_name) {
+    if (['id', '_type', '_unknown_attributes', 'resource_type', 'language', 'container_id', 'contained_id', 'parent_id', 'resource_id'].indexOf(column_name) >= 0) {
+      return 'gray-column';
+    } else {
+      return '';
+    }
+  }
+
+  $scope.locateTable = function(table_name){
+    $('html, body').animate({ scrollTop: $("#" + table_name).offset().top - 50 }, "slow");
+  }
+
+  $scope.locateTop = function(){
+    $("html, body").animate({ scrollTop: 0 }, "slow");
+  }
 });
 
 app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $location){
@@ -56,6 +72,7 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
     .success(function(data){
       $scope.resourceLoading = false;
       $scope.details = data.data;
+      $scope.resource_json = data.resource_json;
     })
   }
   $scope.loadExample = function(file){
@@ -90,6 +107,14 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
       $scope.response.error = "Something went wrong!";
     })
   };
+
+  $scope.locateTable = function(table_name){
+    $('html, body').animate({ scrollTop: $("#" + table_name).offset().top - 50 }, "slow");
+  }
+
+  $scope.locateTop = function(){
+    $("html, body").animate({ scrollTop: 0 }, "slow");
+  }
 });
 
 app.controller('QueriesCtrl', function($scope, $http, $filter){
