@@ -17,13 +17,19 @@
     </div>
   </div>
   <div class='col-sm-9'>
-    <div class='well alert fade in'>
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <p><strong>Left list</strong> shows all resources available in current (version) fhir implementation</p>
-      <p>Use <strong>search area</strong> to find resource you want to investigate</p>
-      <p>Below you can see <strong>list of tables</strong> and corresponding property path (in square brackets) that store selected resource</p>
-      <p>Click "Go" to see structure details of resource table</p>
-      <p>Inherited columns are separated from data columns with gray color</p>
+    <div class='alert alert-warning'>
+      <ul>
+        <li><strong>Left list</strong> shows all available resources (for FHIR version 0.12).</li>
+        <li>Use <strong>search</strong> area to find resource you want to investigate.</li>
+        <li>Choose resource and below you can see <strong>list of tables</strong> that store selected resource.</li>
+        <li>Beside each <strong>table name</strong> you can see <strong>full path</strong> for corresponding JSON property.</li>
+        <li>Follow <strong>"Go"</strong> link to see resource table structure.</li>
+        <li>Table description contains list of columns with corresponding data types.</li>
+        <li>Among <strong>columns</strong> that store <strong>JSON data</strong> there are columns that store <strong>JSON structure</strong>.</li>
+        <li><strong>Structure columns</strong> (marked with <strong>gray color</strong>) are inherited from <strong>base tables</strong> (resource, resource_component).</li>
+        <li>To see how different <strong>JSON objects</strong> are stored in <strong>database</strong> please visit <a href="#demo/resources.html"
+          class="text-success"><strong>Resource Data</strong></a>.</li>
+      </ul>
     </div>
     <h3 loading-spinner='loadingDetails'></h3>
     <ol>

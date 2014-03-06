@@ -24,6 +24,6 @@ app.config(['$routeProvider','$locationProvider',
         controller: 'QueriesCtrl'
       }).
       otherwise({
-        redirectTo: '/index.html'
+        redirectTo: '/demo/schema.html'
       });
 }]);
