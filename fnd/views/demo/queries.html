@@ -21,6 +21,11 @@
     </div>
   </div>
   <div class='col-sm-9'>
+    <div class='well alert fade in'>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <p>At this page you can prepare and execute arbitrary query on demo database</p>
+      <p>Also you can execute samples from the left list</p>
+    </div>
     <div style='height: 100%' ui-codemirror="{mode: 'text/x-plsql', lineWrapping: true, lineNumbers: true}" ng-model='query.query'></div>
     <div ng-show='result'>
       <h4>Result</h4>
