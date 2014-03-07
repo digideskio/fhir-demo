@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+if [ ! -f ./env.sh ]
+then
+  echo "Please cp env.sh.template env.sh # and set configuration"
+  exit 1
+fi
+
+. ./env.sh
+. ./sbin/recreate_db.sh
+. ./sbin/ngx.sh
+. ./sbin/frontend.sh
+
+CMD=$1
+case "$CMD" in
+    "install_ngnx" )
+      install_ngnx
+      ;;
+    "reload_ngx" )
+      reload_ngx
+      ;;
+    "recreate_db" )
+      recreate_db
+      ;;
+    "install_front" )
+      install_front
+      ;;
+    "app" )
+      reload_application_scripts
+      ;;
+    "all" )
+      recreate_db
+      reload_ngx
+      ;;
+    *)
+      cat <<EOF
+subcommands:
+* install_ngnx
+* reload_ngx
+* app - reload app sql scripts
+* recreate_db
+* all - drop db, load fhir db, reloadd pp scripts, reload ngx
+EOF
+      exit
+esac
