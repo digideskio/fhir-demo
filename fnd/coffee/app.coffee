@@ -26,6 +26,8 @@ app.config [
     ).when("/demo/abbreviations",
       templateUrl: "views/demo/abbreviations.html"
       controller: "AbbreviationsCtrl"
+    ).when("/",
+      templateUrl: "views/demo/index.html"
     ).when("/demo/index.html",
       templateUrl: "views/demo/index.html"
       controller: "IndexCtrl"
