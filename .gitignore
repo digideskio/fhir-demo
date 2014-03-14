@@ -5,3 +5,6 @@ bin/
 ngx/pcre-8.34/
 **/Makefile
 env.sh
+fnd/build/
+fnd/node_modules/
+*sw?

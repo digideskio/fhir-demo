@@ -21,7 +21,7 @@
       <hr />
       <h3 loading-spinner='listLoading'></h3>
       <div ng-repeat="item in items | filter:resSearch | orderBy:'resourceType'">
-        <a href="#demo/resources/{{item.resourceType}}/{{item._id}}.html" 
+        <a href="#demo/resources/{{item.resourceType}}/{{item._id}}.html"
           ng-click="show(item)"
           role="button">{{item.resourceType}}</a>
       </div>
@@ -80,7 +80,7 @@
       </h2>
     </div>
     <div class='col-sm-9'>
-      <h2 class="page-header"> 
+      <h2 class="page-header">
         {{ snippet.file }}
         <a class="btn btn-success" ng-click='save()'>Save</a>
       </h2>
@@ -91,7 +91,7 @@
       <a class='btn btn-success' ng-click='upload = false'>Back</a>
       <hr />
       <div ng-repeat="item in snippets | filter:search">
-        <a href="javascript:void(0)" 
+        <a href="javascript:void(0)"
           ng-click="loadExample(item.file)"
           role="button">{{item.file}}</a>
       </div>
