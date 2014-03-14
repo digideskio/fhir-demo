@@ -10,10 +10,10 @@ app.config [
   ($routeProvider, $locationProvider) ->
     $routeProvider.when("/demo/schema.html",
       templateUrl: "views/demo/schema.html"
-      controller: "BaseCtrl"
+      controller: "SchemaCtrl"
     ).when("/demo/schema/:name.html",
       templateUrl: "views/demo/schema.html"
-      controller: "BaseCtrl"
+      controller: "SchemaCtrl"
     ).when("/demo/resources.html",
       templateUrl: "views/demo/resources.html"
       controller: "ResourcesCtrl"
@@ -23,8 +23,11 @@ app.config [
     ).when("/demo/queries.html",
       templateUrl: "views/demo/queries.html"
       controller: "QueriesCtrl"
+    ).when("/demo/abbreviations",
+      templateUrl: "views/demo/abbreviations.html"
+      controller: "AbbreviationsCtrl"
     ).when("/demo/index.html",
       templateUrl: "views/demo/index.html"
       controller: "IndexCtrl"
-    ).otherwise redirectTo: "/demo/index.html"
+    ).otherwise redirectTo: "/noroute.html"
 ]

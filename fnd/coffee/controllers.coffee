@@ -1,6 +1,26 @@
 app = angular.module("app")
-app.controller "BaseCtrl", ($scope, $http, $routeParams) ->
+app.controller "SchemaCtrl", ($scope, $http, $routeParams) ->
   $scope.listLoading = true
+
+  pathEquals = (p1, p2)->
+    p1.join('.') == p2.join('.')
+
+  isChild = (parent, child)->
+    pathEquals(parent.path, child.path[0..-2])
+
+  isParent = (parent, child)->
+    pathEquals(parent.path, child.path[0..(parent.path.length - 1)])
+
+  appendInTree = (acc, item)->
+    for i in acc
+      if isChild(i,item)
+        i._children ||=[]
+        i._children.push(item)
+      else if isParent(i,item)
+        i._children ||= []
+        appendInTree(i._children, item)
+    acc
+
   $http.get("/data/view",
     params:
       view: "resource"
@@ -10,6 +30,7 @@ app.controller "BaseCtrl", ($scope, $http, $routeParams) ->
     $scope.show $routeParams.name or data[0].title
     return
 
+  $scope.selection = {}
   $scope.show = (title) ->
     $scope.resourceTitle = title
     $scope.loadingDetails = true
@@ -19,6 +40,7 @@ app.controller "BaseCtrl", ($scope, $http, $routeParams) ->
     ).success (data) ->
       $scope.loadingDetails = false
       $scope.details = data
+      $scope.itemsTree = data[1..-1].reduce(appendInTree, [data[0]])[0]
       return
 
     return
@@ -212,4 +234,5 @@ app.controller "QueriesCtrl", ($scope, $http, $filter) ->
   return
 
 app.controller "IndexCtrl", ($scope, $http, $routeParams) ->
+app.controller "AbbreviationsCtrl", ($scope, $http, $routeParams) ->
 
