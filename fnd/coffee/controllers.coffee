@@ -1,4 +1,8 @@
 app = angular.module("app")
+app.run ($rootScope, $location)->
+  $rootScope.$on '$routeChangeStart', (next, current) ->
+    $rootScope.currentPath = $location.path()
+
 app.controller "SchemaCtrl", ($scope, $http, $routeParams) ->
   $scope.listLoading = true
 
