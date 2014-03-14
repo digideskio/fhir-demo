@@ -1,63 +1,81 @@
-<div class="container">
-<div class='row'>
-  <div class='col-sm-3'>
-    <h2 class="page-header">
-      <input class="form-control" ng-model="search.title" placeholder="search"/>
-    </h2>
-  </div>
-  <div class='col-sm-9'>
-    <h2 class="page-header"> {{ resourceTitle }} </h2>
+<div class="small-jumbotron">
+  <div class="container">
+    <div class="row">
+      <div class='col-sm-9'>
+        Here you can learn how FHIR resources are
+        stored in relational fhirbase.
+      </div>
+      <div class='col-sm-3'>
+        Select Resource <span style="color: greenyellow;">&#8628;</span>
+      </div>
+    </div>
   </div>
 </div>
-<div class='row'>
-  <div class='col-sm-3'>
-    <h3 loading-spinner='listLoading'></h3>
-    <div ng-repeat="item in items | filter:search">
-      <a href="#/schema/{{item.title}}.html"
-        role="button">{{item.title}}</a>
-    </div>
-  </div>
-  <div class='col-sm-9'>
-    <div class='alert alert-warning'>
-      <ul>
-        <li>Here you can learn how <strong>FHIR resources</strong> are <strong>stored</strong> in <strong>relational database</strong>.</li>
-        <li><strong>Left list</strong> shows all available resources (for FHIR version 0.12).</li>
-        <li>Use <strong>search</strong> area to find resource you want to investigate.</li>
-        <li>Choose resource and below you can see <strong>list of tables</strong> that store selected resource.</li>
-        <li>Beside each <strong>table name</strong> you can see <strong>full path</strong> for corresponding JSON property.</li>
-        <li>Follow <strong>"Go"</strong> link to see description of <strong>table structure</strong>.</li>
-        <li><strong>Table structure</strong> description contains list of <strong>column names</strong> with corresponding <strong>data types</strong>.</li>
-        <li>Among <strong>columns</strong> that store <strong>JSON data</strong> there are columns that store <strong>JSON structure</strong>.</li>
-        <li><strong>Structure columns</strong> (marked with <strong>gray color</strong>) are inherited from <strong>base tables</strong> (resource, resource_component).</li>
-        <li>To see how different <strong>JSON objects</strong> are stored in <strong>database</strong> please visit <a href="#/resources.html"
-          class="text-success"><strong>Resource Data</strong></a>.</li>
-      </ul>
-    </div>
-    <h3 loading-spinner='loadingDetails'></h3>
-    <ol>
-      <li ng-repeat="item in details">
-        {{item.table_name}} <strong>({{item.path.join('.')}})</strong>
-        <a ng-click="locateTable(item.table_name)" class="btn btn-xs btn-default">Go</a>
-      </li>
-    </ol>
+<div class="container">
+  <div class='row'>
+    <div class='col-sm-9'>
+      <h3> {{ resourceTitle }} </h3>
+      <hr/>
+      <p>
+      Each resource saved as root entity table and table per component.  For resource attributes with
+      compound type we create separate tables (for the sake of separation of storage and consistency).
+      Postgresql with default configuration limits length of table names. We didn't want to rebuild postgresql so
+      we shortened table names using the following <a href="#/abbreviation">abbreviation table</a>.
+      Read more about architecture in <a href="https://github.com/fhirbase/fhirbase#schema-overview">README</a>.
+      </p>
 
-    <div id="{{item.table_name}}" ng-repeat="item in details" class="alert alert-error">
-      <table class='table table-bordered table-condensed' style="width: auto;">
-        <caption style='padding: 5px 0; font-weight: bold; font-size: 150%;'>
-          {{item.table_name}}
-        </caption>
-        <tr ng-repeat="column in item.columns">
-          <td class="{{columnClass(column.column_name)}}">
-            {{column.column_name}}
+      <h3 loading-spinner='loadingDetails'></h3>
+
+      <table class="table table-condensed">
+        <thead>
+        <tr>
+          <th>Table name</th>
+          <th>Resource component</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="item in details">
+          <td>
+            <a href="javascript:void(0)" ng-click="locateTable(item.table_name)">
+              {{item.table_name}}
+            </a>
           </td>
-          <td class="{{columnClass(column.column_name)}}">
-            {{column.data_type}}
+          <td>
+            <span class="text-muted">{{ item.path | parents }}</span><b>{{item.path[item.path.length - 1]}}</b>
           </td>
         </tr>
-        </tbody>
       </table>
-      <a ng-click="locateTop()" class="btn btn-xs btn-default">Up</a>
+
+      <hr/>
+
+      <div id="{{item.table_name}}"
+        ng-repeat="item in details">
+        <h3>
+          <a ng-click="locateTop()" class="btn btn-default"> <big class="fa fa-arrow-up"></big>Up</a>
+          {{item.table_name}}
+        </h3>
+        <table class='table table-bordered table-condensed' style="width: auto;">
+          <tr ng-repeat="column in item.columns">
+            <td class="{{columnClass(column.column_name)}}">
+              {{column.column_name}}
+            </td>
+            <td class="{{columnClass(column.column_name)}}">
+              {{column.data_type}}
+            </td>
+          </tr>
+        </table>
+        <hr/>
+      </div>
+    </div>
+    <div class='col-sm-3'>
+      <br/>
+      <div class="well">
+        <input class="form-control" ng-model="search.title" placeholder="search"/>
+        <h3 loading-spinner='listLoading'></h3>
+        <div ng-repeat="item in items | filter:search">
+          <a href="#/schema/{{item.title}}"
+            role="button">{{item.title}}</a>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 </div>

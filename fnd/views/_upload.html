@@ -1,0 +1,28 @@
+<div class='row'>
+  <div class='col-sm-9'>
+    <h2 class="page-header">
+      {{ snippet.file }}
+      <a class="btn btn-success" ng-click='save()'>Save</a>
+      <a class='btn btn-default' ng-click='cancel()'>Cancel</a>
+    </h2>
+    <h3 loading-spinner='snippetLoading'></h3>
+    <div class="alert alert-error" ng-show="error">
+      {{error}}
+    </div>
+    <textarea style="min-height: 500px;"
+      ui-codemirror="{mode: 'javascript', lineWrapping: true, lineNumbers: true}"
+      ng-model='snippet.jsonString'></textarea>
+  </div>
+  <div class='col-sm-3'>
+    <h1></h1>
+    <div class="well">
+    <input class="form-control" ng-model="search.file" placeholder="search"/>
+    <hr />
+    <div ng-repeat="item in snippets | filter:search">
+      <a href="javascript:void(0)" ng-click="loadExample(item.file)" >
+        {{item.file}}
+      </a>
+    </div>
+    </div>
+  </div>
+</div>

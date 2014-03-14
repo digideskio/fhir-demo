@@ -13,3 +13,6 @@ app.filter "compact", ->
           compactFilter subobj
     obj
 
+app.filter "parents", ->
+  (array) ->
+    array[0..-2].join('.') + '.'

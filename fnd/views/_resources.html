@@ -1,0 +1,67 @@
+<div class='row'>
+  <div class='col-sm-9'>
+    <div ng-show='resource'>
+      <h3 class="page-header" ng-show='resource'>
+        {{ resource.resourceType }}
+        <a ng-click="deleteResource()" class="btn btn-danger">
+          Delete
+        </a>
+      </h3>
+      <h3 loading-spinner='resourceLoading'></h3>
+      <table class="table table-condensed">
+        <tr ng-repeat="item in details">
+          <td>
+            <a ng-click="locateTable(item.table_name)">
+              {{item.table_name}}
+            </a>
+          </td>
+          <td>
+            <span class="text-muted">{{ item.path | parents }}</span><b>{{item.path[item.path.length - 1]}}</b>
+          </td>
+        </tr>
+      </table>
+      <br/>
+
+      <div id="{{item.table_name}}" ng-repeat="item in details">
+        <h3>
+          <a href="javascript:void(0);" ng-click="locateTop()" class="btn btn-default"><big class="fa fa-arrow-up"></big> Up</a>
+          {{item.table_name}}
+          <small>({{item.path.join('.')}})</small>
+        </h3>
+        <table class='table table-bordered table-compact'>
+          <thead>
+            <tr>
+              <th ng-repeat="head in item.headers">
+                {{head}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in item.data">
+              <td ng-repeat="head in item.headers">
+                {{row[head]}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br/>
+      </div>
+      <pre>{{resource_json | json}}</pre>
+    </div>
+  </div>
+  <div class='col-sm-3'>
+    <h1></h1>
+    <div class="well">
+      <input class="form-control" ng-model="resSearch.resourceType" placeholder="search"/>
+      <a style="display: block; margin:1em 0;" class="btn btn-l btn-success" ng-click='flags.upload = true'> Upload </a>
+      <h3 loading-spinner='listLoading'></h3>
+      <div ng-repeat="item in items | filter:resSearch | orderBy:'resourceType'">
+        <a href="#/resources/{{item.resourceType}}/{{item._id}}"
+          ng-click="show(item)"
+          role="button">
+          <b>{{item.resourceType}}</b> {{item._id.substring(0,5)}}...
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

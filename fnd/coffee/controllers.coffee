@@ -76,6 +76,9 @@ app.controller "SchemaCtrl", ($scope, $http, $routeParams) ->
   return
 
 app.controller "ResourcesCtrl", ($scope, $http, $filter, $routeParams, $location) ->
+  $scope.flags = {}
+  $scope.cancel = ()->
+    $scope.flags.upload = false
   $scope.listLoading = true
   $http.get("/data/resource",
     params:
@@ -96,7 +99,7 @@ app.controller "ResourcesCtrl", ($scope, $http, $filter, $routeParams, $location
   $scope.deleteResource = ->
     $http.get("/data/delete",
       params:
-        resource_id: (if $routeParams.id then $routeParams.id else $scope.items[0].id)
+        resource_id: (if $routeParams.id then $routeParams.id else ($scope.items[0].id || $scope.items[0]._id))
     ).success (data) ->
       index = undefined
       if $routeParams.id
@@ -107,7 +110,7 @@ app.controller "ResourcesCtrl", ($scope, $http, $filter, $routeParams, $location
       else
         index = 0
       $scope.items.splice index, 1
-      $location.path "/resources.html"
+      $location.path("/resources")
       return
 
     return
@@ -118,7 +121,7 @@ app.controller "ResourcesCtrl", ($scope, $http, $filter, $routeParams, $location
     $scope.resourceLoading = true
     $http.get("/data/details",
       params:
-        resource_id: item.id
+        resource_id: item.id || item._id #FIXME: use only _id
     ).success (data) ->
       $scope.resourceLoading = false
       $scope.details = data.data
@@ -142,13 +145,12 @@ app.controller "ResourcesCtrl", ($scope, $http, $filter, $routeParams, $location
       return
 
     return
-
+  $scope.snippet = {jsonString: "//Put your resource json here" }
   $http.get("/data/demo",
     params:
       rel: "example_resource_list"
   ).success (data) ->
     $scope.snippets = data
-    $scope.loadExample $scope.snippets[0].file
     return
 
   $scope.save = ->
@@ -157,14 +159,12 @@ app.controller "ResourcesCtrl", ($scope, $http, $filter, $routeParams, $location
       url: "/data/resource/create"
       data: $scope.snippet.jsonString
     ).success((data) ->
-      $scope.response = data
-      $location.path "demo/resources/" + $scope.snippet.json.resourceType + "/" + data.id + ".html"
+      if data.error
+        $scope.error = data.error
+      else
+        $location.path("/resources/#{$scope.snippet.json.resourceType}/#{data._id}")
       return
-    ).error (data, status, header) ->
-      $scope.response = {}
-      $scope.response.error = "Something went wrong!"
-      return
-
+    )
     return
 
   $scope.locateTable = (table_name) ->

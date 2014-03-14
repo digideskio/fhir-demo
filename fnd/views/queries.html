@@ -1,39 +1,37 @@
-<div class="container">
-<div class='row'>
-  <div class='col-sm-3'>
-    <h2 class="page-header">
-      <input class="form-control" ng-model="search.name" placeholder="search"/>
-    </h2>
+<div class="small-jumbotron">
+  <div class="container">
+    <div class="row">
+      <div class='col-sm-9'>
+        At this page you can prepare and execute arbitrary query on demo database.
+      </div>
+      <div class='col-sm-3'>
+         Saved queries <span style="color: greenyellow;">&#8628;</span>
+      </div>
+    </div>
   </div>
-  <div class='col-sm-9'>
-    <h2 class="page-header">
+</div>
+<br/>
+
+<div class="container">
+  <div class='row'>
+    <div class='col-sm-9'>
       <button class='btn btn-primary' ng-click="executeQuery()">Execute</button>
       <button class='btn btn-primary' ng-click="saveAs()">Save as</button>
       {{ query.name }}
-    </h2>
-  </div>
-</div>
-<div class='row'>
-  <div class='col-sm-3'>
-    <div ng-repeat="query in queries | filter:search">
-      <a href="javascript:void(0)"
-        ng-click="show(query)"
-        role="button">{{query.name}}
-      </a>
+      <div style='min-height: 500px;' ui-codemirror="{mode: 'text/x-plsql', lineWrapping: true, lineNumbers: true}" ng-model='query.query'>
+      </div>
+      <div ng-show='result'>
+        <h4>Result</h4>
+        <pre highlight='{{result}}'></pre>
+      </div>
+    </div>
+    <div class='col-sm-3'>
+      <div class="well">
+        <input class="form-control" ng-model="search.name" placeholder="search"/>
+        <div ng-repeat="query in queries | filter:search">
+          <a href="javascript:void(0)" ng-click="show(query)"> {{query.name}} </a>
+        </div>
+      </div>
     </div>
   </div>
-  <div class='col-sm-9'>
-    <div class='alert alert-warning'>
-      <ul>
-        <li>At this page you can prepare and execute arbitrary query on demo database</li>
-        <li>Also you can execute samples from the left list.</li>
-      </ul>
-    </div>
-    <div style='height: 100%' ui-codemirror="{mode: 'text/x-plsql', lineWrapping: true, lineNumbers: true}" ng-model='query.query'></div>
-    <div ng-show='result'>
-      <h4>Result</h4>
-      <pre highlight='{{result}}'></pre>
-    </div>
-  </div>
-</div>
 </div>

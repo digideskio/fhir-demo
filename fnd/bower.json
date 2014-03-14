@@ -20,6 +20,7 @@
     "angular-route": "latest",
     "angular-resource": "latest",
     "angular-sanitize": "latest",
+    "angular-animate": "latest",
     "angular-cookies": "latest",
     "angular-ui-codemirror": "latest",
     "highlightjs": "latest"

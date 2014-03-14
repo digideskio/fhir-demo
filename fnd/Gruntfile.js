@@ -43,6 +43,7 @@ module.exports = function (grunt) {
           "lib/bootstrap/js/alert.js",
           "lib/angular/angular.js",
           "lib/angular-route/angular-route.js",
+          "lib/angular-animate/angular-animate.js",
           "lib/angular-cookies/angular-cookies.js",
           "lib/angular-sanitize/angular-sanitize.js",
           "lib/codemirror/lib/codemirror.js",

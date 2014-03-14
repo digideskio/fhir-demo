@@ -1,117 +1,31 @@
-<div class="container">
-<div ng-hide='upload'>
-  <div class='row'>
-    <div class='col-sm-3'>
-      <h2 class="page-header">
-        <input class="form-control" ng-model="resSearch.resourceType" placeholder="search"/>
-      </h2>
-    </div>
-    <div class='col-sm-9'>
-      <h2 class="page-header" ng-show='resource'>
-        {{ resource.resourceType }}
-        <a ng-click="deleteResource()" class="btn btn-danger">
-          Delete
-        </a>
-      </h2>
-    </div>
-  </div>
-  <div class='row'>
-    <div class='col-sm-3'>
-      <a class="btn btn-success" ng-click='upload = true'> Upload
-      </a>
-      <hr />
-      <h3 loading-spinner='listLoading'></h3>
-      <div ng-repeat="item in items | filter:resSearch | orderBy:'resourceType'">
-        <a href="#/resources/{{item.resourceType}}/{{item._id}}.html"
-          ng-click="show(item)"
-          role="button">{{item.resourceType}}</a>
-      </div>
-    </div>
-    <div class='col-sm-9'>
-      <div class='alert alert-warning'>
-        <ul>
-          <li><strong>Left list</strong> shows all resources loaded to demo database.</li>
-          <li>Follow <strong>"Upload"</strong> to add new resource to demo database.</li>
-          <li>Use <strong>search</strong> area to find resource you want to investigate.</li>
-          <li>Choose resource and below you can see <strong>list of tables</strong> that store selected resource.</li>
-          <li>Beside each <strong>table name</strong> you can see <strong>full path</strong> for corresponding JSON property.</li>
-          <li>Follow <strong>"Go"</strong> link to see <strong>table rows</strong> for corresponding property.</li>
-          <li>At the bottom of the page you can see selected resource in JSON format.</li>
-      </div>
-      <h3 loading-spinner='resourceLoading'></h3>
-      <div ng-show='resource'>
-        <ol>
-          <li ng-repeat="item in details">
-            {{item.table_name}} <strong>({{item.path.join('.')}})</strong>
-            <a ng-click="locateTable(item.table_name)" class="btn btn-xs btn-default">Go</a>
-          </li>
-        </ol>
-
-        <div id="{{item.table_name}}" ng-repeat="item in details">
-          <h3>{{item.table_name}} <strong>({{item.path.join('.')}})</strong></h3>
-          <table class='table table-bordered'>
-            <thead>
-              <tr>
-                <th ng-repeat="head in item.headers">
-                  {{head}}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="row in item.data">
-              <td ng-repeat="head in item.headers">
-                {{row[head]}}
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <a ng-click="locateTop()" class="btn btn-xs btn-default">Up</a>
+<div ng-hide='flags.upload'>
+  <div class="small-jumbotron">
+    <div class="container">
+      <div class="row">
+        <div class='col-sm-9'>
+          Here you can store FHIR resources into a demo database
+          and see how it was saved in relations.
         </div>
-        <pre>{{resource_json | json}}</pre>
-        <a ng-click="locateTop()" class="btn btn-xs btn-default">Up</a>
+        <div class='col-sm-3'>
+           Saved resources <span style="color: greenyellow;">&#8628;</span>
+        </div>
       </div>
     </div>
   </div>
+  <div class="container" ng-include="'/views/_resources.html'"></div>
 </div>
-<div ng-show='upload'>
-  <div class='row'>
-    <div class='col-sm-3'>
-      <h2 class="page-header">
-        <input class="form-control" ng-model="search.file" placeholder="search"/>
-      </h2>
-    </div>
-    <div class='col-sm-9'>
-      <h2 class="page-header">
-        {{ snippet.file }}
-        <a class="btn btn-success" ng-click='save()'>Save</a>
-      </h2>
-    </div>
-  </div>
-  <div class='row'>
-    <div class='col-sm-3'>
-      <a class='btn btn-success' ng-click='upload = false'>Back</a>
-      <hr />
-      <div ng-repeat="item in snippets | filter:search">
-        <a href="javascript:void(0)"
-          ng-click="loadExample(item.file)"
-          role="button">{{item.file}}</a>
-      </div>
-    </div>
-    <div class='col-sm-9'>
-      <div class='alert alert-warning'>
-        <ul>
-          <li>Here you can upload <strong>FHIR resources</strong> to <strong>relational demo database</strong>.</li>
-          <li>Using <strong>search</strong> find resource template and load it in JSON format to text area below.</li>
-          <li>You can modify JSON in text area at you wish or create new one.</li>
-          <li>After you are ready click <strong>"Save"</strong> to upload resource to demo database.</li>
-        </ul>
-      </div>
-      <h3 loading-spinner='snippetLoading'></h3>
-      <textarea ui-codemirror="{mode: 'javascript', lineWrapping: true, lineNumbers: true}" ng-model='snippet.jsonString' style='height: 100%'></textarea>
-      <div class="alert alert-info">
-        {{response | json}}
+<div ng-show='flags.upload'>
+  <div class="small-jumbotron">
+    <div class="container">
+      <div class="row">
+        <div class='col-sm-9'>
+          Select resource from examples or insert your json into textarea.
+        </div>
+        <div class='col-sm-3'>
+          Select from examples <span style="color: greenyellow;">&#8628;</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  <div class="container" ng-include="'/views/_upload.html'"> </div>
 </div>
