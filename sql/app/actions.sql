@@ -56,7 +56,7 @@ as $$
   plv8.elog(NOTICE, sql);
   plv8.execute(sql);
 
-  return JSON.stringify({id: resource_id });
+  return JSON.stringify({_id: resource_id });
 $$;
 
 --SELECT actions.delete_resource(('{"uri_args": {"resource_id": "' || (select id from fhir.resource limit 1)::varchar || '"}}')::json);
@@ -96,9 +96,9 @@ RETURNS json
 language plv8
 as $$
   var resource_id = req.uri_args.resource_id;
-  var resource_type = plv8.execute("SELECT r.resource_type from fhir.resource r where r.id = '" + resource_id + "'")[0]['resource_type'];
-  var table_name = plv8.execute("SELECT r._type from fhir.resource r where r.id = '" + resource_id + "'")[0]['_type'];
-  var resource_json = plv8.execute( "SELECT t.json from fhir.view_" + table_name + " t where id = '" + resource_id + "'")[0]['json'];
+  var resource_type = plv8.execute("SELECT r.resource_type from fhir.resource r where r._id = '" + resource_id + "'")[0]['resource_type'];
+  var table_name = plv8.execute("SELECT r._type from fhir.resource r where r._id = '" + resource_id + "'")[0]['_type'];
+  var resource_json = plv8.execute( "SELECT t.json from fhir.view_" + table_name + " t where _id = '" + resource_id + "'")[0]['json'];
   var resource_tables = plv8.execute("SELECT t.* from test.expanded_resource_tables t where resource_name = '" + resource_type + "'");
   var res = [];
   for(var i=0; i<resource_tables.length; i++){
@@ -113,7 +113,7 @@ as $$
     }
 
     var contruct_query = function() {
-      var where = 'id'
+      var where = '_id'
       for (var j = 0; j < columns.length; j++) {
         if (columns[j]['column_name'] == 'resource_id') {
           where = 'resource_id';
@@ -204,11 +204,11 @@ RETURNS json
 language plv8
 as $$
   var res = [];
-  var list = plv8.execute('select id, _type from fhir.resource');
+  var list = plv8.execute('select _id, _type from fhir.resource');
   for(var i=0; i<list.length; i++){
-        var id = list[i]['id'];
+        var id = list[i]['_id'];
         var view = list[i]['_type'];
-        var obj = plv8.execute( "SELECT t.json from fhir.view_" + view + " t where id = '" + id + "'")[0]['json'];
+        var obj = plv8.execute( "SELECT t.json from fhir.view_" + view + " t where _id = '" + id + "'")[0]['json'];
         res.push(obj);
         }
  return JSON.stringify(res);
@@ -224,7 +224,7 @@ FUNCTION actions.create_resource(body json)
 RETURNS json
 language plpgsql AS $$
 BEGIN
-  RETURN ('{"id": "' || fhir.insert_resource(body->'request_body') || '"}')::json;
+  RETURN ('{"_id": "' || fhir.insert_resource(body->'request_body') || '"}')::json;
 END
 $$;
 

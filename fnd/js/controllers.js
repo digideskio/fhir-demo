@@ -20,7 +20,7 @@ app.controller('BaseCtrl', function($scope, $http, $routeParams){
   }
 
   $scope.columnClass = function(column_name) {
-    if (['id', '_type', '_unknown_attributes', 'resource_type', 'language', 'container_id', 'contained_id', 'parent_id', 'resource_id'].indexOf(column_name) >= 0) {
+    if (['_id', '_type', '_unknown_attributes', 'resource_type', 'language', 'container_id', 'contained_id', 'parent_id', 'resource_id'].indexOf(column_name) >= 0) {
       return 'gray-column';
     } else {
       return '';
@@ -43,9 +43,9 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
     $scope.listLoading = false;
     $scope.items = data;
     var item;
-    if ($routeParams.id)
+    if ($routeParams._id)
       item = {
-        id: $routeParams.id,
+        _id: $routeParams._id,
         resourceType: $routeParams.type
       }
     else
@@ -53,11 +53,11 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
     $scope.show(item);
   })
   $scope.deleteResource = function(){
-    $http.get('/data/delete', {params: { 'resource_id': $routeParams.id ? $routeParams.id : $scope.items[0].id}})
+    $http.get('/data/delete', {params: { 'resource_id': $routeParams._id ? $routeParams._id : $scope.items[0]._id}})
     .success(function(data){
       var index;
-      if ($routeParams.id)
-        index = $scope.items.map(function(item) { item.id }).indexOf($routeParams.id);
+      if ($routeParams._id)
+        index = $scope.items.map(function(item) { item._id }).indexOf($routeParams._id);
       else
         index = 0
       $scope.items.splice(index, 1);
@@ -68,7 +68,7 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
     if (!item) return;
     $scope.resource = item;
     $scope.resourceLoading = true;
-    $http.get('/data/details', {params: { resource_id: item.id }})
+    $http.get('/data/details', {params: { resource_id: item._id }})
     .success(function(data){
       $scope.resourceLoading = false;
       $scope.details = data.data;
@@ -101,7 +101,7 @@ app.controller('ResourcesCtrl', function($scope, $http, $filter, $routeParams, $
       data: $scope.snippet.jsonString
     }).success(function(data){
       $scope.response = data
-      $location.path('demo/resources/' + $scope.snippet.json.resourceType + '/' + data.id + '.html');
+      $location.path('demo/resources/' + $scope.snippet.json.resourceType + '/' + data._id + '.html');
     }).error(function(data, status, header) {
       $scope.response = {};
       $scope.response.error = "Something went wrong!";

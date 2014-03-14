@@ -15,7 +15,7 @@ app.config(['$routeProvider','$locationProvider',
         templateUrl: 'views/demo/resources.html',
         controller: 'ResourcesCtrl'
       }).
-      when('/demo/resources/:type/:id.html', {
+      when('/demo/resources/:type/:_id.html', {
         templateUrl: 'views/demo/resources.html',
         controller: 'ResourcesCtrl'
       }).
