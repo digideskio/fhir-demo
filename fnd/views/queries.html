@@ -15,10 +15,12 @@
 <div class="container">
   <div class='row'>
     <div class='col-sm-9'>
-      <button class='btn btn-primary' ng-click="executeQuery()">Execute</button>
-      <button class='btn btn-primary' ng-click="saveAs()">Save as</button>
-      {{ query.name }}
-      <div style='min-height: 500px;' ui-codemirror="{mode: 'text/x-plsql', lineWrapping: true, lineNumbers: true}" ng-model='query.query'>
+      <h3>
+        {{ query.name }}
+        <button class='btn btn-primary' ng-click="executeQuery()">Execute</button>
+        <button class='btn btn-primary' ng-click="saveAs()">Save as</button>
+      </h3>
+      <div style='min-height: 100px;' ui-codemirror="{mode: 'text/x-plsql', lineWrapping: true, lineNumbers: true}" ng-model='query.query'>
       </div>
       <div ng-show='result'>
         <h4>Result</h4>
@@ -28,6 +30,7 @@
     <div class='col-sm-3'>
       <div class="well">
         <input class="form-control" ng-model="search.name" placeholder="search"/>
+        <hr/>
         <div ng-repeat="query in queries | filter:search">
           <a href="javascript:void(0)" ng-click="show(query)"> {{query.name}} </a>
         </div>
