@@ -1,5 +1,6 @@
 *swp
 *~
+fhir-demo-deploy.log
 fnd/lib/
 bin/
 ngx/pcre-8.34/
