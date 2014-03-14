@@ -1,94 +1,61 @@
-<br/>
-<div class="page-header">
-  <h2> Intro </h2>
+<div class='row'>
+  <div class='col-sm-3'>
+    <h2 class="page-header">
+      <input class="form-control" ng-model="search.title" placeholder="search"/>
+    </h2>
+  </div>
+  <div class='col-sm-9'>
+    <h2 class="page-header"> {{ resourceTitle }} </h2>
+  </div>
 </div>
-<p>
-All resources are stored in separate <a href="http://www.postgresql.org/docs/9.3/static/ddl-schemas.html">schema</a>
-(<b>fhir</b> - by default). For the sake of relational querying and constraints each resource are stored in it's own set of relations.
-By default postgresql limits length of table name, so we are using <a href="#/demo/abbreviations">abbreviation's table</a> for shortening names.
-</p>
-
-<p>
-Head of each resource stored in a separate table,
-which <a href="http://www.postgresql.org/docs/9.3/static/tutorial-inheritance.html">inherits</a>
-from <b><a href="">resource</a></b> table
-and represents the root of resource aggregate. Using inheritance we always can query base resource table
-for all stored resources.
-</p>
-
-<p>
-Components of resource are stored in relational form in separated tables, which
-inherits from <b><a>resource_component</a></b> table
-All component's tables references resource table (column <b> resource_id</b>),
-for more efficient querying. If component is part of another component, then
-column <b>parent_id</b> references enclosing component.
-</p>
-
-<p>
-Complex datatypes are represented as tables. We create dedicated table
-for each attribute with complex type and make it inherit from datatype's table
-for structural inheritance. This mean you can add attributes to datatype globally in one shut,
-modifying base table of datatype.
-</p>
-
-<!-- <p> Select any resource to explore how it is layouted: </p> -->
-<!-- <input class="form-control" ng-model="search.title" placeholder="search"/> -->
-<!-- <hr/> -->
-<!-- <div class="resources" > -->
-<!--   <h3 loading-spinner='listLoading'></h3> -->
-<!--   <a ng-repeat="item in items" -->
-<!--     href="#demo/schema/{{item.title}}.html" -->
-<!--     role="button"> -->
-<!--     {{item.title}} -->
-<!--   </a> -->
-<!-- </div> -->
-
-
-<script type="text/ng-template"  id="tree_item_renderer.html">
-  <a href="javascript:void()" title="{{item.table_name}}" ng-click="selection.citem = item">
-    <strong>{{item.path[item.path.length - 1]}}</strong>
-    <!-- <span class="text-muted">{{item.table_name}}</span> -->
-  </a>
-  <ul>
-    <li ng-repeat="item in item._children" ng-include="'tree_item_renderer.html'"></li>
-  </ul>
-</script>
-<hr/>
-<!-- <h2> Resource <b>{{ resourceTitle }}</b></h2> -->
-<!-- <p> Click link in list to watch detailed component's table description</p> -->
-<!-- <hr/> -->
-<div class="row">
-  <div class="col-xs-3">
+<div class='row'>
+  <div class='col-sm-3'>
     <h3 loading-spinner='listLoading'></h3>
-    <div ng-repeat="item in items">
-      <a
-        href="#demo/schema/{{item.title}}.html"
-        role="button">
-        {{item.title}}
-      </a>
+    <div ng-repeat="item in items | filter:search">
+      <a href="#demo/schema/{{item.title}}.html" 
+        role="button">{{item.title}}</a>
     </div>
   </div>
-  <div class="col-xs-3">
+  <div class='col-sm-9'>
+    <div class='alert alert-warning'>
+      <ul>
+        <li>Here you can learn how <strong>FHIR resources</strong> are <strong>stored</strong> in <strong>relational database</strong>.</li>
+        <li><strong>Left list</strong> shows all available resources (for FHIR version 0.12).</li>
+        <li>Use <strong>search</strong> area to find resource you want to investigate.</li>
+        <li>Choose resource and below you can see <strong>list of tables</strong> that store selected resource.</li>
+        <li>Beside each <strong>table name</strong> you can see <strong>full path</strong> for corresponding JSON property.</li>
+        <li>Follow <strong>"Go"</strong> link to see description of <strong>table structure</strong>.</li>
+        <li><strong>Table structure</strong> description contains list of <strong>column names</strong> with corresponding <strong>data types</strong>.</li>
+        <li>Among <strong>columns</strong> that store <strong>JSON data</strong> there are columns that store <strong>JSON structure</strong>.</li>
+        <li><strong>Structure columns</strong> (marked with <strong>gray color</strong>) are inherited from <strong>base tables</strong> (resource, resource_component).</li>
+        <li>To see how different <strong>JSON objects</strong> are stored in <strong>database</strong> please visit <a href="#demo/resources.html"
+          class="text-success"><strong>Resource Data</strong></a>.</li>
+      </ul>
+    </div>
     <h3 loading-spinner='loadingDetails'></h3>
-    <a title="{{itemsTree.table_name}}" ng-click="selection.citem = itemsTree">
-      <b>{{itemsTree.path[0]}}</b>
-    </a>
-    <ul class="tbl-tree">
-      <li ng-repeat="item in itemsTree._children" ng-include="'tree_item_renderer.html'"></li>
-    </ul>
-  </div>
-  <div class="col-xs-6">
-    <h3>Table: {{selection.citem.table_name}} </h3>
-    <h4>Component: {{selection.citem.path.join('.')}}</h4>
-    <table class='table table-bordered table-condensed' style="width: auto;">
-      <tr ng-repeat="column in selection.citem.columns">
-        <td class="{{columnClass(column.column_name)}}">
-          {{column.column_name}}
-        </td>
-        <td class="{{columnClass(column.column_name)}}">
-          {{column.data_type}}
-        </td>
-      </tr>
-    </table>
+    <ol>
+      <li ng-repeat="item in details">
+        {{item.table_name}} <strong>({{item.path.join('.')}})</strong>
+        <a ng-click="locateTable(item.table_name)" class="btn btn-xs btn-default">Go</a>
+      </li>
+    </ol>
+
+    <div id="{{item.table_name}}" ng-repeat="item in details" class="alert alert-error">
+      <table class='table table-bordered table-condensed' style="width: auto;">
+        <caption style='padding: 5px 0; font-weight: bold; font-size: 150%;'>
+          {{item.table_name}}
+        </caption>
+        <tr ng-repeat="column in item.columns">
+          <td class="{{columnClass(column.column_name)}}">
+            {{column.column_name}}
+          </td>
+          <td class="{{columnClass(column.column_name)}}">
+            {{column.data_type}}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <a ng-click="locateTop()" class="btn btn-xs btn-default">Up</a>
+    </div>
   </div>
 </div>

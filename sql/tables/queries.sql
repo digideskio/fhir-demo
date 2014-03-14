@@ -11,10 +11,10 @@ E'SELECT fhir.insert_resource((''{\n'
 '  "resourceType": "Patient",\n'
 '  "name": [{"family":["Donald'' || round(random()*10^3) || ''"]}],\n'
 '  "birthDate": "'' || current_timestamp || ''"\n'
-'}'')::json) as id');
+'}'')::json) as _id');
 
 insert into demo.queries(name, query) values('Update patient',
-E'SELECT fhir.update_resource((SELECT id FROM fhir.patient limit 1),\n'
+E'SELECT fhir.update_resource((SELECT _id FROM fhir.patient limit 1),\n'
 '(''{\n'
 '  "resourceType": "Patient",\n'
 '  "name": [{"family":["Pedro'' || round(random()*10^3) || ''"]}],\n'
@@ -38,7 +38,7 @@ E'SELECT *\n'
 insert into demo.queries(name, query) values('Patient resource with condition',
 E'SELECT *\n'
 'FROM fhir.view_patient vp,\n'
-'LATERAL (SELECT unnest(family) AS family FROM fhir.patient_name pn WHERE pn.resource_id = vp.id) fam\n'
+'LATERAL (SELECT unnest(family) AS family FROM fhir.patient_name pn WHERE pn.resource_id = vp._id) fam\n'
 'WHERE fam.family ilike ''Donald%'''
 'LIMIT 1');
 
