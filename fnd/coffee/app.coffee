@@ -8,28 +8,28 @@ app.config [
   "$routeProvider"
   "$locationProvider"
   ($routeProvider, $locationProvider) ->
-    $routeProvider.when("/demo/schema.html",
-      templateUrl: "views/demo/schema.html"
+    $routeProvider.when("/schema.html",
+      templateUrl: "views/schema.html"
       controller: "SchemaCtrl"
-    ).when("/demo/schema/:name.html",
-      templateUrl: "views/demo/schema.html"
+    ).when("/schema/:name.html",
+      templateUrl: "views/schema.html"
       controller: "SchemaCtrl"
-    ).when("/demo/resources.html",
-      templateUrl: "views/demo/resources.html"
+    ).when("/resources.html",
+      templateUrl: "views/resources.html"
       controller: "ResourcesCtrl"
-    ).when("/demo/resources/:type/:id.html",
-      templateUrl: "views/demo/resources.html"
+    ).when("/resources/:type/:id.html",
+      templateUrl: "views/resources.html"
       controller: "ResourcesCtrl"
-    ).when("/demo/queries.html",
-      templateUrl: "views/demo/queries.html"
+    ).when("/queries.html",
+      templateUrl: "views/queries.html"
       controller: "QueriesCtrl"
-    ).when("/demo/abbreviations",
-      templateUrl: "views/demo/abbreviations.html"
+    ).when("/abbreviations",
+      templateUrl: "views/abbreviations.html"
       controller: "AbbreviationsCtrl"
     ).when("/",
-      templateUrl: "views/demo/index.html"
-    ).when("/demo/index.html",
-      templateUrl: "views/demo/index.html"
+      templateUrl: "views/index.html"
+    ).when("/index.html",
+      templateUrl: "views/index.html"
       controller: "IndexCtrl"
     ).otherwise redirectTo: "/noroute.html"
 ]

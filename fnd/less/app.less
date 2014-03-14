@@ -1,22 +1,38 @@
 body {
-  padding-top: 60px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .footer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
   border-top: 1px solid #eee;
-  margin-top: 40px;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  background: #fff;
+  opacity: 0.7;
+  p {
+   text-align: right;
+   margin: 0;
+   padding: 4px 0;
+  }
 }
 
-/* Main marketing message and sign up button */
 .jumbotron {
-  text-align: center;
-  background-color: transparent;
-}
-.jumbotron .btn {
-  font-size: 21px;
-  padding: 14px 24px;
+  background: #16A085;
+  color: white;
+  border-radius: 0 !important;
+  h1 {
+    font-size: 63px;
+    sup {
+      font-size: 30%;
+      vertical-align: super;
+      opacity: 0.5;
+    }
+  }
+  h3 {
+    font-size: 21px;
+  }
 }
 
 /* Customize the nav-justified links to be fill the entire space of the .navbar */

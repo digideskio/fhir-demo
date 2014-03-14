@@ -107,7 +107,7 @@ app.controller "ResourcesCtrl", ($scope, $http, $filter, $routeParams, $location
       else
         index = 0
       $scope.items.splice index, 1
-      $location.path "/demo/resources.html"
+      $location.path "/resources.html"
       return
 
     return

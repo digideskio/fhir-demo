@@ -1,3 +1,4 @@
+<div class="container">
 <div class='row'>
   <div class='col-sm-3'>
     <h2 class="page-header">
@@ -12,7 +13,7 @@
   <div class='col-sm-3'>
     <h3 loading-spinner='listLoading'></h3>
     <div ng-repeat="item in items | filter:search">
-      <a href="#demo/schema/{{item.title}}.html" 
+      <a href="#/schema/{{item.title}}.html"
         role="button">{{item.title}}</a>
     </div>
   </div>
@@ -28,7 +29,7 @@
         <li><strong>Table structure</strong> description contains list of <strong>column names</strong> with corresponding <strong>data types</strong>.</li>
         <li>Among <strong>columns</strong> that store <strong>JSON data</strong> there are columns that store <strong>JSON structure</strong>.</li>
         <li><strong>Structure columns</strong> (marked with <strong>gray color</strong>) are inherited from <strong>base tables</strong> (resource, resource_component).</li>
-        <li>To see how different <strong>JSON objects</strong> are stored in <strong>database</strong> please visit <a href="#demo/resources.html"
+        <li>To see how different <strong>JSON objects</strong> are stored in <strong>database</strong> please visit <a href="#/resources.html"
           class="text-success"><strong>Resource Data</strong></a>.</li>
       </ul>
     </div>
@@ -58,4 +59,5 @@
       <a ng-click="locateTop()" class="btn btn-xs btn-default">Up</a>
     </div>
   </div>
+</div>
 </div>

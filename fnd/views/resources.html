@@ -1,3 +1,4 @@
+<div class="container">
 <div ng-hide='upload'>
   <div class='row'>
     <div class='col-sm-3'>
@@ -21,7 +22,7 @@
       <hr />
       <h3 loading-spinner='listLoading'></h3>
       <div ng-repeat="item in items | filter:resSearch | orderBy:'resourceType'">
-        <a href="#demo/resources/{{item.resourceType}}/{{item._id}}.html"
+        <a href="#/resources/{{item.resourceType}}/{{item._id}}.html"
           ng-click="show(item)"
           role="button">{{item.resourceType}}</a>
       </div>
@@ -112,4 +113,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>
