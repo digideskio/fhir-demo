@@ -35,6 +35,10 @@ case "$CMD" in
       recreate_db
       reload_ngx
       ;;
+    "deploy" )
+      recreate_db
+      install_front
+      ;;
     *)
       cat <<EOF
 subcommands:
