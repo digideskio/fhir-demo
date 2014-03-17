@@ -1,5 +1,5 @@
 function reload_ngx {
-  cat cfg/nginx.conf | sed "s/PGDATABASE/$PGDATABASE/g"  | sed "s/PGPORT/$PGPORT/g" | sed "s/PGUSER/$PGUSER/g" | sed "s/PGPASSWORD/$PGPASSWORD/g" | sed "s|WEBROOT|$FHIR_ROOT/fnd|g" | sed "s|FHIR_ROOT|$FHIR_ROOT|g"  | sed "s/NGXPORT/$NGXPORT/g" > bin/nginx/conf/nginx.conf
+  cat cfg/nginx.conf | sed "s/PGDATABASE/$PGDATABASE/g" | sed "s/PGPORT/$PGPORT/g" | sed "s/PGUSER/$PGUSER/g" | sed "s/PGPASSWORD/$PGPASSWORD/g" | sed "s|WEBROOT|$FHIR_ROOT/fnd|g" | sed "s|FHIR_ROOT|$FHIR_ROOT|g" | sed "s/NGXPORT/$NGXPORT/g" | sed "s/NGXUSER/$NGXUSER/g" > bin/nginx/conf/nginx.conf
 
   bin/nginx/sbin/nginx -s stop || echo 'not running'
   echo 'Starting nginx...'
