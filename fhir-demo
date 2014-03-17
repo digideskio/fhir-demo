@@ -37,7 +37,7 @@ case "$CMD" in
       ;;
     "deploy" )
       git pull
-      recreate_db
+      #recreate_db
       install_front
       ;;
     *)
