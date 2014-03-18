@@ -7,7 +7,7 @@ function install_front {
   npm install bower
   npm install grunt-cli
   npm install grunt-protractor-runner
-  bower install
+  `npm bin`/bower install
   `npm bin`/grunt build
   echo '[install front] finished'
 }
