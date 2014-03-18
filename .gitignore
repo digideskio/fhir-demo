@@ -1,6 +1,6 @@
 *swp
 *~
-fnd/views/fhir-demo-deploy.log
+fhir-demo-deploy.log
 fnd/lib/
 bin/
 node_modules/
