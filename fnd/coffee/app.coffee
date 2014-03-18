@@ -32,5 +32,8 @@ app.config [
     ).when("/index",
       templateUrl: "views/index.html"
       controller: "IndexCtrl"
+    ).when("/abbreviations",
+      templateUrl: "views/abbreviations.html"
+      controller: "AbbreviationsCtrl"
     ).otherwise redirectTo: "/noroute"
 ]

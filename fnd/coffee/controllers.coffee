@@ -240,4 +240,11 @@ app.controller "QueriesCtrl", ($scope, $http, $filter) ->
 
 app.controller "IndexCtrl", ($scope, $http, $routeParams) ->
 app.controller "AbbreviationsCtrl", ($scope, $http, $routeParams) ->
+  $http.get("/data/query",
+    params:
+      q: "select * from fhir.short_names"
+  ).success (data) ->
+    $scope.items = data
+    return
 
+  return
