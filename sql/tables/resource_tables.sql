@@ -1,6 +1,5 @@
 CREATE SCHEMA IF NOT EXISTS view;
-CREATE OR REPLACE
-VIEW view.resource AS (
+CREATE MATERIALIZED VIEW view.resource AS (
   select unnest(path) as title from meta.resource_elements
   where array_length(path,1) = 1
   order by title
@@ -9,8 +8,7 @@ VIEW view.resource AS (
 drop schema if exists test cascade;
 create schema test;
 
-CREATE OR REPLACE VIEW
-test.columns AS (
+CREATE MATERIALIZED VIEW test.columns AS (
   SELECT
     c.table_name,
     c.column_name,
@@ -28,8 +26,7 @@ test.columns AS (
   WHERE c.table_schema = 'fhir'
 );
 
-CREATE
-VIEW test.resource_tables as (
+CREATE MATERIALIZED VIEW test.resource_tables as (
   SELECT
     path,
     path[1] as resource_name,
@@ -61,7 +58,7 @@ VIEW test.resource_tables as (
 create type test.column_desc as (column_name varchar, data_type varchar);
 create type test.resource_desc as (table_name varchar, columns json);
 
-create view test.expanded_resource_tables as
+create MATERIALIZED view test.expanded_resource_tables as
   select
     rt.path,
     rt.resource_name,
@@ -71,6 +68,7 @@ create view test.expanded_resource_tables as
   join test.columns c on c.table_name = rt.table_name
   group by rt.path, rt.resource_name, rt.table_name;
 
-create view test.resource_description as
-  select resource_name, array_to_json(array_agg((table_name, columns)::test.resource_desc)) as description from test.expanded_resource_tables
+create MATERIALIZED view test.resource_description as
+  select resource_name, array_to_json(array_agg((table_name, columns)::test.resource_desc)) as description
+  from test.expanded_resource_tables
   group by resource_name;
