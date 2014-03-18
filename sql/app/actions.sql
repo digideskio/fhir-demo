@@ -1,4 +1,4 @@
---db:myfhir
+--db:fhir_demo
 --{{{
 CREATE SCHEMA IF NOT EXISTS actions;
 --}}}
@@ -40,8 +40,10 @@ language plv8
 as $$
   return plv8.execute("SELECT array_to_json(array_agg(row_to_json(t.*)))::varchar as json from test.expanded_resource_tables t where resource_name = '" + req.uri_args.resource + "'")[0]['json']
 $$;
+--}}}
+--{{{
 
---SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
+SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
 --}}}
 --{{{
 drop function if exists actions.delete_resource(json);

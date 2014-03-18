@@ -3,6 +3,7 @@
 fhir-demo-deploy.log
 fnd/lib/
 bin/
+node_modules/
 ngx/pcre-8.34/
 **/Makefile
 env.sh

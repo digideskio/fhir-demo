@@ -11,5 +11,8 @@ function install_front {
   nvm list
   npm install -g bower
   bower install
+  npm install -g grunt-cli
+  npm install grunt-protractor-runner
+  `npm bin`/grunt build
   echo zashibis
 }
