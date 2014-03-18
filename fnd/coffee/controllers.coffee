@@ -60,6 +60,7 @@ app.controller "SchemaCtrl", ($scope, $http, $routeParams) ->
       "contained_id"
       "parent_id"
       "resource_id"
+      "id"
     ].indexOf(column_name) >= 0
       "gray-column"
     else
