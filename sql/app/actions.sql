@@ -42,8 +42,7 @@ as $$
 $$;
 --}}}
 --{{{
-
-SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
+--SELECT actions.show('{"uri_args": {"resource": "Alert"}}'::json);
 --}}}
 --{{{
 drop function if exists actions.delete_resource(json);
@@ -63,6 +62,7 @@ $$;
 
 --SELECT actions.delete_resource(('{"uri_args": {"resource_id": "' || (select id from fhir.resource limit 1)::varchar || '"}}')::json);
 --}}}
+--{{{
 drop function if exists actions.update_resource(json);
 CREATE or REPLACE
 FUNCTION actions.update_resource(req json)
@@ -77,17 +77,18 @@ begin
   return req->'request_body';
 end;
 $$;
---{{{
-SELECT fhir.update_resource(resource_id::uuid, req->'request_body');
 --}}}
 --{{{
-select resource_id
-from (
-  SELECT resource_id, unnest(family) as family
-  FROM fhir.patient_name
-) p
-where p.family ilike 'Donald%';
-select * from fhir.resource;
+--SELECT fhir.update_resource(resource_id::uuid, req->'request_body');
+--}}}
+--{{{
+--select resource_id
+--from (
+--  SELECT resource_id, unnest(family) as family
+--  FROM fhir.patient_name
+--) p
+--where p.family ilike 'Donald%';
+--select * from fhir.resource;
 --select * from test.expanded_resource_tables;
 --}}}
 
