@@ -51,7 +51,7 @@ app.controller "SchemaCtrl", ($scope, $http, $routeParams) ->
 
   $scope.columnClass = (column_name) ->
     if [
-      "id"
+      "_id"
       "_type"
       "_unknown_attributes"
       "resource_type"
