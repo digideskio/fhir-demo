@@ -19,6 +19,7 @@ function reload_application_scripts {
 
   # upload fhir resources into example table
 
+  rm -rf /tmp/tmp.sql
   echo '' > /tmp/tmp.sql
   for f in $FHIR_ROOT/data/*json
   do
