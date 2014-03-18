@@ -38,7 +38,14 @@ case "$CMD" in
     "deploy" )
       git pull
       recreate_db
-      install_front
+      cd fnd
+      source ~/.nvm/nvm.sh
+      nvm use 0.10
+      nvm list
+      npm install bower
+      npm install grunt-cli
+      npm install grunt-protractor-runner
+      bower install
       `npm bin`/grunt build
       ;;
     *)
