@@ -39,6 +39,7 @@ case "$CMD" in
       git pull
       recreate_db
       install_front
+      echo 'deploy finished'
       ;;
     *)
       cat <<EOF
