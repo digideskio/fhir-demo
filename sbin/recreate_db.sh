@@ -31,4 +31,5 @@ function reload_application_scripts {
   cat /tmp/tmp.sql | psql  -p $PGPORT -d $PGDATABASE
   psql  -p $PGPORT -d $PGDATABASE -c "UPDATE demo.example_resource SET file = regexp_replace(file, E'.*/', '');"
   psql  -p $PGPORT -d $PGDATABASE -c "select count(*) from demo.example_resource"
+  psql  -p $PGPORT -d $PGDATABASE -c "VACUUM FULL"
 }
