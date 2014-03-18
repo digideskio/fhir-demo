@@ -1,17 +1,13 @@
 function install_front {
-  pwd
+  echo '[install front] started'
   cd fnd
-  pwd
-  ls
-  id
   source ~/.nvm/nvm.sh
-  nvm --help
-  nvm list
   nvm use 0.10
   nvm list
-  npm install -g bower
-  bower install
-  npm install -g grunt-cli
+  npm install bower
+  npm install grunt-cli
   npm install grunt-protractor-runner
-  echo 'front installed'
+  bower install
+  `npm bin`/grunt build
+  echo '[install front] finished'
 }
