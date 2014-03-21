@@ -9,6 +9,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-angular-templates');
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   grunt.initConfig({
     coffee: {
@@ -55,6 +56,13 @@ module.exports = function (grunt) {
       css: {
         src: ['build/*.css'],
         dest: 'build/app.css'
+      }
+    },
+    connect: {
+      server: {
+        options: {
+          keepalive: true
+        }
       }
     },
     watch: {
