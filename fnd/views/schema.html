@@ -69,7 +69,7 @@
     <div class='col-sm-3'>
       <br/>
       <div class="well">
-        <input class="form-control" ng-model="search.title" placeholder="search"/>
+        <input class="form-control" ng-model="search.title" placeholder="Search"/>
         <h3 loading-spinner='listLoading'></h3>
         <div ng-repeat="item in items | filter:search">
           <a href="#/schema/{{item.title}}"

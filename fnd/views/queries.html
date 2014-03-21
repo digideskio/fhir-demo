@@ -29,7 +29,7 @@
     </div>
     <div class='col-sm-3'>
       <div class="well">
-        <input class="form-control" ng-model="search.name" placeholder="search"/>
+        <input class="form-control" ng-model="search.name" placeholder="Search"/>
         <hr/>
         <div ng-repeat="query in queries | filter:search">
           <a href="javascript:void(0)" ng-click="show(query)"> {{query.name}} </a>
