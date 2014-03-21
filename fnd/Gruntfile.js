@@ -8,7 +8,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-angular-templates');
-  grunt.loadNpmTasks('grunt-protractor-runner');
   grunt.loadNpmTasks('grunt-shell');
 
   grunt.initConfig({
