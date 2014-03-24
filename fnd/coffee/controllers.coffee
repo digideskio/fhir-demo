@@ -2,10 +2,10 @@ app = angular.module("app")
 app.run ($rootScope, $location)->
   $rootScope.$on '$routeChangeStart', (next, current) ->
     $rootScope.currentPath = $location.path()
-    $rootScope.pageTitle = 'FHIRbase' + switch $rootScope.currentPath
-       when '/schema' then ' - Database Schema'
-       when '/resources' then ' - Resource Data'
-       when '/queries' then ' - Queries'
+    $rootScope.pageTitle = 'FHIRBase' + switch $rootScope.currentPath
+       when '/schema' then ' – Database Schema'
+       when '/resources' then ' – Resource Data'
+       when '/queries' then ' – Queries'
        else ''
 
 app.controller "SchemaCtrl", ($scope, $http, $routeParams) ->
