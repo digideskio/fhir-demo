@@ -3,7 +3,7 @@
     <div class="row">
       <div class='col-sm-9'>
         Here you can learn how FHIR resources are
-        stored in relational fhirbase.
+        stored in FHIRBase.
       </div>
       <div class='col-sm-3'>
         Select Resource <span style="color: greenyellow;">&#8628;</span>
@@ -17,11 +17,11 @@
       <h3> {{ resourceTitle }} </h3>
       <hr/>
       <p>
-      Each resource saved as root entity table and table per component.  For resource attributes with
-      compound type we create separate tables (for the sake of separation of storage and consistency).
+      Each resource is stored as a root entity table, a table per component. For resource attributes with
+      compound type we created separate tables (for the sake of storage and consistency separation).
       Postgresql with default configuration limits length of table names. We didn't want to rebuild postgresql so
-      we shortened table names using the following <a href="#/abbreviations">abbreviations table</a>.
-      Read more about architecture in <a href="https://github.com/fhirbase/fhirbase#schema-overview">README</a>.
+      we shortened table names using the <a href="#/abbreviations">table of abbreviations</a>.
+      Read more about the architecture in <a href="https://github.com/fhirbase/fhirbase#schema-overview">README</a>.
       </p>
 
       <h3 loading-spinner='loadingDetails'></h3>
@@ -29,8 +29,8 @@
       <table class="table table-condensed">
         <thead>
         <tr>
-          <th>Table name</th>
-          <th>Resource component</th>
+          <th>Table Name</th>
+          <th>Resource Component</th>
         </tr>
         </thead>
         <tr ng-repeat="item in details">
