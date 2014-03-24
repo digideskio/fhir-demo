@@ -10,13 +10,13 @@
 ## TODO
 ### Demo structure
 #### Guide
-* What is it 'FHIRbase'?
-* Structure of FHIRbase
+* What is 'FHIRBase'?
+* Structure of FHIRBase
 * Detailed structure of Patient resource
-* Lets add Patient
-* Lets view added Patient
-* Lets edit and view Patient
-* Lets delete and view Patient
+* Let's add Patient
+* Let's view the added Patient
+* Let's edit and view Patient
+* Let's delete and view Patient
 * Go to the full demo
 
 #### Full Demo
