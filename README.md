@@ -1,11 +1,10 @@
 ## Installation
 * Install postgresql 9.3
+* Install postgresql-server-9.3
 * Install postgresql-plv8
-* Install fhirbase
-* ./install
-* bash install_fnd
-* ./configure_nginx
-* ./compile
+* ./fhir-demo install_ngnx
+* ./fhir-demo fnd
+* ./fhir-demo all
 
 ## TODO
 ### Demo structure

@@ -51,7 +51,7 @@ E'SELECT unnest(family) as family, count(*) as count\n'
 
 
 --{{{
-select resource_id, unnest(family) as family
-from fhir.patient_name
-order by resource_id;
+--select resource_id, unnest(family) as family
+--from fhir.patient_name
+--order by resource_id;
 --}}}

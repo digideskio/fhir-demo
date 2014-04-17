@@ -99,11 +99,13 @@ RETURNS json
 language plv8
 as $$
   var resource_id = req.uri_args.resource_id;
-  var resource_type = plv8.execute("SELECT r.resource_type from fhir.resource r where r._id = '" + resource_id + "'")[0]['resource_type'];
-  var table_name = plv8.execute("SELECT r._type from fhir.resource r where r._id = '" + resource_id + "'")[0]['_type'];
-  var resource_json = plv8.execute( "SELECT t.json from fhir.view_" + table_name + " t where _id = '" + resource_id + "'")[0]['json'];
+  var resource_type = plv8.execute("SELECT r.resource_type from fhir.resource r where r._state = 'current' and r._logical_id = '" + resource_id + "'")[0]['resource_type'];
+  var table_name = plv8.execute("SELECT C.relname FROM fhir.resource r JOIN pg_class C on C.oid = r.tableoid WHERE r._state = 'current' and r._logical_id = '" + resource_id + "'")[0]['relname'];
+  var resource_json = plv8.execute( "SELECT t.data from fhir." + table_name + " t where _state = 'current' and _logical_id = '" + resource_id + "'")[0]['json'];
   var resource_tables = plv8.execute("SELECT t.* from test.expanded_resource_tables t where resource_name = '" + resource_type + "'");
+  var version_id = plv8.execute("SELECT _version_id FROM fhir.resource WHERE _state = 'current' AND _logical_id = '" + resource_id + "'")[0]['_version_id'];
   var res = [];
+
   for(var i=0; i<resource_tables.length; i++){
     var rt = resource_tables[i];
     var table_name = rt['table_name'];
@@ -116,14 +118,7 @@ as $$
     }
 
     var contruct_query = function() {
-      var where = '_id'
-      for (var j = 0; j < columns.length; j++) {
-        if (columns[j]['column_name'] == 'resource_id') {
-          where = 'resource_id';
-          break;
-        }
-      }
-      return "SELECT * from fhir." + table_name + " where " + where + " = '" + resource_id + "'";
+      return "SELECT * from fhir." + table_name + " where _version_id = '" + version_id + "'";
     }
 
     var format_result = function(data) {
@@ -206,15 +201,14 @@ FUNCTION actions.resource(req json)
 RETURNS json
 language plv8
 as $$
-  var res = [];
-  var list = plv8.execute('select _id, _type from fhir.resource');
-  for(var i=0; i<list.length; i++){
-        var id = list[i]['_id'];
-        var view = list[i]['_type'];
-        var obj = plv8.execute( "SELECT t.json from fhir.view_" + view + " t where _id = '" + id + "'")[0]['json'];
-        res.push(obj);
-        }
- return JSON.stringify(res);
+  var list = plv8.execute("SELECT C.relname AS table_name, r._logical_id  AS id FROM fhir.resource r JOIN pg_class C on C.oid = r.tableoid WHERE r._state = 'current'");
+
+  var res = list.map(function(e, i){
+    var r = plv8.execute("SELECT data, _logical_id FROM fhir." + e['table_name'] + " WHERE _state = 'current' AND _logical_id = '" + e['id'] + "'")[0];
+    r['data']['_id'] = r['_logical_id'];
+    return r['data'];
+  });
+  return JSON.stringify(res);
 $$;
 
 --SELECT actions.resource('{"uri_args": {"type": "patient"}}'::json);
