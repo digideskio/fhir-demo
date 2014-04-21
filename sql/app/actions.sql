@@ -155,7 +155,13 @@ as $$
       return headers;
     }
 
+    var remove_data_column = function() {
+      for (var i = 0; i < sel.length; i++)
+        delete sel[i]['data'];
+    }
+
     var sel = plv8.execute(contruct_query());
+    remove_data_column();
     format_result(sel);
 
     if (sel.length > 0) {
