@@ -1,4 +1,5 @@
 ## Installation
+
 * Install postgresql 9.3
 * Install postgresql-server-9.3
 * Install postgresql-plv8
@@ -6,8 +7,15 @@
 * ./fhir-demo fnd
 * ./fhir-demo all
 
+## Service
+
+> All premium services from developers of Fhirbase projects 
+> should be requested from Choice Hospital Systems (http://Choice-HS.com)
+
+
 ## TODO
 ### Demo structure
+
 #### Guide
 * What is 'FHIRBase'?
 * Structure of FHIRBase
