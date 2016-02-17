@@ -1,3 +1,5 @@
+# [DEPRECATED] No longer being actively developed
+
 ## Installation
 
 * Install postgresql 9.3
